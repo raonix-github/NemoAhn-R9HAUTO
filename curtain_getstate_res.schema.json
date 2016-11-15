@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "version": {
+        "type": "integer"
+      },
+      "msgid": {
+        "type": "string"
+      },
+      "payload": {
+        "type":
+          "object",
+        "properties":
+        {
+          "indexes":
+          {
+            "type":
+              "array",
+            "items":
+            {
+              "type":
+                "object",
+              "properties":
+              {
+                "openning":
+                {
+                  "type":
+                    "boolean"
+                },
+                "closing":
+                {
+                  "type":
+                    "boolean"
+                },
+                "opened":
+                {
+                  "type":
+                    "boolean"
+                },
+                "closed":
+                {
+                  "type":
+                    "boolean"
+                },
+                "angle":
+                {
+                  "type":
+                    "integer"
+                },
+                "level":
+                {
+                  "type":
+                    "integer"
+                },
+                "idx":
+                {
+                  "type":
+                    "integer"
+                },
+                "connection":
+                {
+                  "type":
+                    "boolean"
+                }
+              },
+              "required":
+                [
+                "openning",
+              "closing",
+              "opened",
+              "closed",
+              "angle",
+              "level",
+              "idx",
+              "connection"
+                ]
+            }
+          },
+          "devtype":
+          {
+            "type":
+              "string"
+          },
+          "command":
+          {
+            "type":
+              "string"
+          }
+        },
+        "required":
+          [
+          "indexes",
+        "devtype",
+        "command"
+          ]
+      }
+    },
+    "required":
+      [
+      "code",
+    "type",
+    "version",
+    "msgid",
+    "payload"
+      ]
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "version": {
+        "type": "integer",
+        "title": "Version schema",
+        "description": "Raonix R9HAUTO_JSON version",
+        "default": 1
+      },
+      "type": {
+        "type": "string",
+        "description": "메세지 전송 방향, 요청과 응답",
+        "eunm": [ "request", "reply", "ack" ]
+      },
+      "msgid": {
+        "type": "string",
+        "description": "ack에서 동일하게 사용",
+        "default": "msg1"
+      },
+      "payload": {
+        "type": "object",
+        "title": "Payload schema",
+        "description": "payload..",
+        "properties": {
+          "devtype":
+          {
+            "type": "string",
+            "decription": "device type",
+            "enum": [
+              "all",
+              "gateway",
+              "aircontidioner",
+              "batch",
+              "boiler",
+              "curtain",
+              "doorlock",
+              "fanheater",
+              "generalio",
+              "gasvalve",
+              "hood",
+              "homebox",
+              "light",
+              "outlet",
+              "r9batch",
+              "roomcontrol",
+              "stpower",
+              "thermostat",
+              "thermomat"
+            ]
+          },
+          "command":
+          {
+            "type": "string",
+            "description": "명령",
+            "enum": [
+              "getstate",
+              "setstate",
+              "devinfo",
+              "gettimeinfo",
+              "getreserv",
+              "setmode",
+              "setpushmsg",
+              "getpushmsg",
+              "settempsensor"
+            ]
+          }
+        },
+        "required":
+          [
+            "devtype",
+            "command"
+          ]
+      }
+    },
+    "required":
+      [
+      "version",
+    "type",
+    "msgid",
+    "payload"
+      ]
+}

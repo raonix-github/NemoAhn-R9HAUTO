@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "version": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "msgid": {
+        "type": "string"
+      },
+      "payload": {
+        "type": "object",
+        "properties": {
+          "devtype":
+          {
+            "type":
+              "string"
+          },
+          "command":
+          {
+            "type":
+              "string"
+          },
+          "indexes":
+          {
+            "type":
+              "array",
+            "items":
+            {
+              "type":
+                "object",
+              "properties":
+              {
+                "idx":
+                {
+                  "type":
+                    "integer"
+                }
+              },
+              "required":
+                [
+                "idx"
+                ]
+            }
+          }
+        },
+        "required":
+          [
+          "devtype",
+        "command",
+        "indexes"
+          ]
+      }
+    },
+    "required":
+      [
+      "version",
+    "type",
+    "msgid",
+    "payload"
+      ]
+}
