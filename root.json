@@ -64,6 +64,16 @@
               "getpushmsg",
               "settempsensor"
             ]
+          },
+          "indexes":
+          {
+            "type": "array",
+            "anyOf": [
+              { "$ref": "#/definitions/Curtain/curtain_devinfo_reply" }, 
+              { "$ref": "#/definitions/Curtain/curtain_getstate_request" }, 
+              { "$ref": "#/definitions/Curtain/curtain_getstate_reply" }, 
+              { "$ref": "#/definitions/Curtain/curtain_setstate_request" }
+            ]
           }
         },
         "required":
@@ -74,10 +84,30 @@
       }
     },
     "required":
-      [
+    [
       "version",
-    "type",
-    "msgid",
-    "payload"
-      ]
+      "type",
+      "msgid",
+      "payload"
+    ],
+    "definitions": {
+      "Curtain": {
+        "curtain_devinfo_reply": {
+          "id": "/Curtain/curtain_devinfo_reply.json"
+        },
+        "curtain_getstate_request": {
+          "id": "/Curtain/curtain_getstate_request.json"
+        },
+        "curtain_getstate_reply": {
+          "id": "/Curtain/curtain_getstate_reply.json"
+        },
+        "curtain_setstate_request": {
+          "id": "/Curtain/curtain_setstate_request.json"
+        }
+      },
+      "Light": {
+      },
+      "Thermostat": {
+      }
+    }
 }

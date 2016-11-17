@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties":
+  {
+    "id":
+    {
+      "type": "string",
+      "description": "기기(End Device)의 시리얼 넘버 hex 10자리로 구성됨",
+      "default": "ffffffff"
+    },
+    "idx":
+    {
+      "type": "integer",
+      "description": "GW에서 같은 종류의 기기를 구분하기 위한 index"
+    },
+    "connected":
+    {
+      "type": "boolean",
+      "description": "기기의 연결 상태"
+    },
+    "name":
+    {
+      "type": "string",
+      "description": "기기를 구분하기 위한 이름 (APP에서 언어별로 재정의된다)"
+    },
+    "unknown":
+    {
+      "type": "boolean",
+      "description": "커튼의 현 상태값을 알지 못함"
+    },
+    "angle":
+    {
+      "type": "boolean",
+      "description": "각도 조절 기능 있음"
+    },
+    "level":
+    {
+      "type": "boolean",
+      "description": "열림 조절 기능 있음"
+    }
+  },
+  "required":
+  [
+    "id",
+    "idx",
+    "connected",
+    "name",
+    "unknown",
+    "angle",
+    "level"
+  ]
+}

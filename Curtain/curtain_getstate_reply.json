@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties":
+  {
+    "idx":
+    {
+      "type": "integer",
+      "description": "GW에서 같은 종류의 기기를 구분하기 위한 index"
+    },
+    "connection":
+    {
+      "type": "boolean",
+      "description": "기기의 연결 상태"
+    },
+    "openning":
+    {
+      "type": "boolean",
+      "description": "여는중"
+    },
+    "closing":
+    {
+      "type": "boolean",
+      "description": "닫는중"
+    },
+    "opened":
+    {
+      "type": "boolean",
+      "description": "열림"
+    },
+    "closed":
+    {
+      "type": "boolean",
+      "description": "닫힘"
+    },
+    "angle":
+    {
+      "type": "integer",
+      "description": "슬롯 각도 정보(0~10)"
+    },
+    "level":
+    {
+      "type": "integer",
+      "description": "커튼의 열림 정보(0~10)"
+    }
+  },
+  "required":
+  [
+    "idx",
+    "connection",
+    "openning",
+    "closing",
+    "opened",
+    "closed",
+    "angle",
+    "level"
+  ]
+}
