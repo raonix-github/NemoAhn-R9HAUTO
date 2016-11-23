@@ -1,0 +1,76 @@
+# ------------------------------------------------------------------------------
+#  상태
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "getstate.forest",
+  "id": null,
+  "params": [
+    {
+      "idx": 1
+    }
+  ]
+}
+
+# reply
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+    "devtype":"forest",
+    "command":"getstate",
+    "indexes": [
+      {
+        "idx":1,
+        "connection":true,
+        "roomcons": [
+          {
+            "rcidx": 1,
+            "power":true,
+            "heating":true,
+            "curtemp":25,
+            "settemp":32
+          }
+        ],
+        "keytag":true,
+        "batchlight":true,
+        "induction":true,
+        "securityon":true,
+        "fireon":true,
+
+        "securityevent":true,
+        "fireevent":true
+      }
+    ]
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  제어
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "params": [
+    {
+      "idx": 1,
+      "outputs": [
+        {
+          "outidx": 1, "on": true
+        }
+      ],
+      "roomcons": [
+        {
+          "rcidx": 1,
+          "power": true,
+          "settemp": 33
+        }
+      ]
+    }
+  ],
+  "jsonrpc": "2.0",
+  "method": "setstate.forest",
+  "id": null
+}
