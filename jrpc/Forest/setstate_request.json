@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "description": "root object",
+    "properties": {
+      "params": {
+        "type": "array",
+        "description": "params",
+        "items": {
+          "type": "object",
+          "description": "",
+          "properties":
+          {
+            "idx":
+            {
+              "type":
+                "integer",
+              "description": "device ID",
+              "default":
+                1
+            },
+            "outputs":
+            {
+              "type":
+                "array",
+              "description": "Relay Outputs",
+              "items":
+              {
+                "type":
+                  "object",
+                "description": "output",
+                "properties":
+                {
+                  "outidx":
+                  {
+                    "type":
+                      "integer",
+                    "description": "output number 1~8",
+                    "default":
+                      1
+                  },
+                  "on":
+                  {
+                    "type":
+                      "boolean",
+                    "description": "output relay on/off",
+                    "default":
+                      true
+                  }
+                },
+                "required":
+                  [
+                  "outidx",
+                  "on"
+                  ]
+              }
+            },
+            "roomcons":
+            {
+              "type":
+                "array",
+              "description": "Thermostats",
+                "items":
+              {
+                "type":
+                  "object",
+                "description": "thermostat",
+                "properties":
+                {
+                  "rcidx":
+                  {
+                    "type":
+                      "integer",
+                    "description": "thermostat number",
+                    "default":
+                      1
+                  },
+                  "power":
+                  {
+                    "type":
+                      "boolean",
+                    "description": "thermostat on/off",
+                    "default":
+                      true
+                  },
+                  "settemp":
+                  {
+                    "type":
+                      "integer",
+                    "description": "settemp",
+                    "default":
+                      33
+                  }
+                },
+                "required":
+                  [
+                  "rcidx",
+                  "power",
+                  "settemp"
+                  ]
+              }
+            }
+          },
+          "required":
+            [
+            "idx"
+            ]
+        }
+      },
+      "jsonrpc":
+      {
+        "type":
+          "string",
+        "description": "JSON-RPC version",
+        "default":
+          "2.0"
+      },
+      "method":
+      {
+        "type":
+          "string",
+        "description": "JSON-RPC method name",
+        "default":
+          "setstate.forest"
+      },
+      "id":
+      {
+        "type":
+          "null",
+        "description": "msg id",
+        "default":
+          null
+      }
+    },
+    "required":
+      [
+      "params",
+      "jsonrpc",
+      "method",
+      "id"
+      ]
+}

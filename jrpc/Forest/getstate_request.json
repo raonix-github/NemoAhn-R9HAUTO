@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "description": "root object",
+    "properties": {
+      "jsonrpc": {
+        "type": "string",
+        "description": "JSON-RPC version",
+        "default": "2.0"
+      },
+      "method": {
+        "type": "string",
+        "description": "JSON-RPC method name"
+      },
+      "id":
+      {
+        "type": "null",
+        "description": "msg id",
+        "default": null
+      },
+      "params":
+      {
+        "type": "array",
+        "description": "params",
+        "items":
+        {
+          "type": "object",
+          "description": "",
+          "properties":
+          {
+            "idx":
+            {
+              "type": "integer",
+              "description": "device ID. ",
+              "default": 1
+            }
+          },
+          "required":
+            [
+              "idx"
+            ]
+        }
+      }
+    },
+    "required": [
+      "jsonrpc",
+      "method",
+      "id",
+      "params"
+    ]
+}
