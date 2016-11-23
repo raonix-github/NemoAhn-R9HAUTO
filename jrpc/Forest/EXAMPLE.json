@@ -38,9 +38,9 @@
         "batchlight":true,
         "induction":true,
         "securityon":true,
-        "fireon":true,
 
-        "securityevent":true,
+        "motiondetect":true,
+        "notmovement":true,
         "fireevent":true
       }
     ]
