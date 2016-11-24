@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://www.raonix.com/schemas/forest/setstate_request.json",
+  "type": "object",
+  "description": "root object",
+  "allOf" : [
+    { "$ref": "jsonrpc-request-2.0.json#/definitions/request" },
+    {
+      "properties": {
+        "method": {
+          "enum": [ "forest.setstate" ]
+        }
+      }
+    },
+    { "$ref": "#/definitions/request" }
+  ],
+  "definitions": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "array",
+          "description": "params",
+          "items": {
+            "type": "object",
+            "description": "",
+            "properties":
+            {
+              "idx": {
+                "type": "integer",
+                "description": "device ID"
+              },
+              "roomcons": {
+                "type": "array",
+                "description": "Thermostats",
+                "items": {
+                  "type": "object",
+                  "description": "thermostat",
+                  "properties": {
+                    "rcidx": {
+                      "type": "integer",
+                      "description": "thermostat number"
+                    },
+                    "power": {
+                      "type": "boolean",
+                      "description": "thermostat on/off"
+                    },
+                    "settemp": {
+                      "type": "integer",
+                      "description": "settemp"
+                    }
+                  },
+                  "required": [ "rcidx", "power", "settemp" ]
+                }
+              },
+              "batchlight": {
+                "type": "boolean",
+                "description": "일괄소등 스위치 상태"
+              },
+              "induction": {
+                "type": "boolean",
+                "description": "인덕션(전기레인지) 상태"
+              },
+              "securityon": {
+                "type": "boolean",
+                "description": "방범감시기능 동작 여부 켜짐/꺼짐"
+              }
+            },
+            "required": [ "idx" ]
+          }
+        }
+      }
+    }
+  }
+}

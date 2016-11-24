@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://www.raonix.com/schemas/forest/getstate_response.json",
+  "type": "object",
+  "description": "response to getsate"
+  "allOf" : [
+    { "$ref": "jsonrpc-request-2.0.json#/definitions/response" },
+    { "$ref": "#/definitions/response" }
+  ],
+  "definitions": {
+    "response": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "description": "reply msg object. ",
+          "items": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "idx": {
+                "type": "integer",
+                "description": "device id"
+              },
+              "connection": {
+                "type": "boolean",
+                "description": "연결 상태"
+              },
+              "roomcons": {
+                "type": "array",
+                "description": "온도조절기들의 상태 array",
+                "items": {
+                  "type": "object",
+                  "description": "온도조절기 개별 상태",
+                  "properties": {
+                    "rcidx": {
+                      "type": "integer",
+                      "description": "온도조절기 번호, 덕유산의 경우 1만 사용",
+                      "default": 1
+                    },
+                    "power": {
+                      "type": "boolean",
+                      "description": "난방 모드 인지 외출모드인지 ",
+                      "default": true
+                    },
+                    "heating": {
+                      "type": "boolean",
+                      "description": "실제 보일러 가동 여부",
+                      "default": true
+                    },
+                    "curtemp": {
+                      "type": "integer",
+                      "description": "현재온도",
+                      "default": 25
+                    },
+                    "settemp": {
+                      "type": "integer",
+                      "description": "설정온도",
+                      "default": 32
+                    }
+                  },
+                  "required": [
+                    "rcidx", "power", "heating", "curtemp", "settemp"
+                  ]
+                }
+              },
+
+              "batchlight": {
+                "type": "boolean",
+                "description": "일괄소등 스위치 상태"
+              },
+              "induction": {
+                "type": "boolean",
+                "description": "인덕션(전기레인지) 상태"
+              },
+              "securityon": {
+                "type": "boolean",
+                "description": "방범감시기능 동작 여부 켜짐/꺼짐"
+              },
+
+              "keytag": {
+                "type": "boolean",
+                "description": "키텍 꼽혀있는지 빠져있는지 (재실/공실)"
+              },
+              "motiondetect": {
+                "type": "boolean",
+                "description": "공실 방범 센서 움직임을 감시함"
+              },
+              "notmovement": {
+                "type": "boolean",
+                "description": "재실 일정 시간 움직임 없음"
+              },
+              "fireevent": {
+                "type": "boolean",
+                "description": "화재발생"
+              }
+            },
+            "required": [
+              "idx", "connection", "roomcons", "keytag", "batchlight",
+              "induction", "securityon", "fireon", "securityevent", "fireevent"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
