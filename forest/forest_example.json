@@ -5,39 +5,67 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "forest.getstate",
+  "method": "dev.get",
   "id": null,
-  "params": [
-    { "idx": 1 }
-  ]
+  "params": {
+    "devtype": "forest",
+    "indexes": [
+      { "idx": 1 }
+    ]
+  }
 }
 
 # response
 {
   "jsonrpc":"2.0”,
   "id":null,
-  "result": [
-    {
-      "idx":1,
-      "connection":true,
-      "roomcons": [
-        {
-          "rcidx": 1,
-          "power":true,
-          "heating":true,
-          "curtemp":25,
-          "settemp":32
-        }
-     ],
-     "keytag":true,
-     "batchlight":true,
-     "induction":true,
-     "securityon":true,
-     "motiondetect":true,
-     "notmovement":true,
-     "fireevent":true
-    }
-  ]
+  "result": {
+    "devtype": "forest",
+    "indexes": [
+      {
+	"idx":1,
+	"connection":true,
+	"roomcons": [
+	  {
+	    "rcidx": 1,
+	    "power":true,
+	    "heating":true,
+	    "curtemp":25,
+	    "settemp":32
+	  }
+	],
+	"keytag":true,
+	"batchlight":true,
+	"induction":true,
+	"securityon":true,
+	"motiondetect":true,
+	"notmovement":true,
+	"fireevent":true
+      }
+    ]
+  }
+}
+
+# update
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+    "devtype": "forest",
+    "indexes": [
+      {
+	"idx":1,
+	"connection":true,
+	"roomcons": [
+	  {
+	    "rcidx": 1,
+	    "power":true
+	  }
+	],
+	"fireevent":true
+      }
+    ]
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -49,19 +77,20 @@
   "jsonrpc": "2.0",
   "id": null
   "method": "forest.setstate",
-  "params": [
-    {
+  "params": {
+    "devtype": "forest",
+    "indextes": [
       "idx": 1,
       "roomcons": [
-        {
-          "rcidx": 1,
-          "power": true,
-          "settemp": 33
-        }
+	{
+	  "rcidx": 1,
+	  "power": true,
+	  "settemp": 33
+	}
       ],
-     "batchlight":true,
-     "induction":true,
-     "securityon":true
-    }
-  ]
+      "batchlight":true,
+      "induction":true,
+      "securityon":true
+    ]
+  }
 }

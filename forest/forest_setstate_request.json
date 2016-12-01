@@ -32,22 +32,21 @@
               },
               "roomcons": {
                 "type": "array",
-                "description": "Thermostats",
+				"description": "온도조절기 제어",
                 "items": {
                   "type": "object",
-                  "description": "thermostat",
                   "properties": {
                     "rcidx": {
                       "type": "integer",
-                      "description": "thermostat number"
+                      "description": "온도조절기 번호"
                     },
                     "power": {
                       "type": "boolean",
-                      "description": "thermostat on/off"
+                      "description": "on/off"
                     },
                     "settemp": {
                       "type": "integer",
-                      "description": "settemp"
+                      "description": "설정온도"
                     }
                   },
                   "required": [ "rcidx", "power", "settemp" ]
@@ -63,7 +62,7 @@
               },
               "securityon": {
                 "type": "boolean",
-                "description": "방범감시기능 동작 여부 켜짐/꺼짐"
+                "description": "방범감시기능 켜짐/꺼짐"
               }
             },
             "required": [ "idx" ]
