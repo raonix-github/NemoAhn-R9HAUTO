@@ -1,0 +1,145 @@
+# ------------------------------------------------------------------------------
+#  상태
+#  -
+# ------------------------------------------------------------------------------
+
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "dev.get",
+  "id": null,
+  "params": {
+    "devtype": "forest",
+    "indexes": [
+      { "idx": 1 }
+    ]
+  }
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "method": "dev.get",
+  "id":null,
+  "result": {
+    "devtype": "forest",
+    "indexes": [
+      {
+        "idx":1,
+        "connection":true,
+        "roomcons": [
+	      {
+	        "rcidx": 1,
+    	    "power":true,
+    	    "heating":true,
+    	    "schedult":true,
+    	    "intervaltimer":true,
+    	    "intervaltimeval":30,
+    	    "curtemp":25.0,
+    	    "settemp":32.0
+    	  }
+    	],
+        "controls": {
+    	  "batchlight":true,
+          "outsidelight": false,
+    	  "induction":true,
+    	  "securityon":true,
+          "doorlock": true
+        },
+        "settings": {
+          "motiontime": 8,
+          "gogouttime": 3,
+          "roomcontempdetecttime": 2,
+          "roomcontempmax": 45,
+          "roomcontempmin": 5,
+          "roomconpresetenable": true,
+          "roomconpresettemp": 25,
+          "roomconpresettime": 30
+        },
+        "events": {
+    	  "keytag":true,
+    	  "motiondetect":true,
+    	  "notmovement":true,
+    	  "gasleakdetect":true,
+    	  "fireevent":true
+        }
+      }
+    ]
+  }
+}
+
+# update
+{
+  "jsonrpc":"2.0”,
+  "method": "dev.update",
+  "id":null,
+  "result": {
+    "devtype": "forest",
+    "indexes": [
+      {
+    	"idx":1,
+	    "connection":true,
+    	"roomcons": [
+	      {
+	        "rcidx": 1,
+	        "power":true
+	      }
+	    ],
+	    "fireevent":true
+      }
+    ]
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  제어
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "dev.set",
+  "params": {
+    "devtype": "forest",
+    "indextes": [
+      "idx": 1,
+      "roomcons": [
+        {
+          "rcidx": 1,
+          "power": true,
+          "settemp": 33
+        }
+      ],
+      "batchlight":true,
+      "induction":true,
+      "securityon":true
+    ]
+  }
+}
+
+
+# ------------------------------------------------------------------------------
+# System  
+#  -
+# ------------------------------------------------------------------------------
+# get system-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "sys.gettime"
+}
+
+# reply system-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "year": 2015,
+    "month":9,
+    "day":7,
+    "hour":16,
+    "min":49,
+    "sec":52
+  }
+}
