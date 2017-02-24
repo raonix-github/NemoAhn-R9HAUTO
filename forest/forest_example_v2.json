@@ -1,118 +1,90 @@
+
 # ------------------------------------------------------------------------------
-#  상태
+#  methods
+#  - get.{devtype}.getdevinfo
+#  - get.{devtype}.getstate.{idx}
+#  - get.{devtype}.getconfig.{idx}
+#  - get.{devtype}.setstate.{idx}
+#  - get.{devtype}.setconfig.{idx}
+#  - get.{devtype}.update.{idx}
+#  - get.gateway.getdevinfo
+#  - get.gateway.
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+#  기기정보 요청(특성)
 #  -
 # ------------------------------------------------------------------------------
-
-
-get.state.{devtype}.{idx}
-get.setting.{devtype}.{idx}
-get.gateway.getdevinfo
-get.gateway.
-
-
-get.{devtype}.state.
 # request
 {
   "jsonrpc": "2.0",
-  "method": "dev.get.state/setting",
+  "method": "get.forest.getdevinfo",
   "id": null,
-  "params": {
-	   "devtype": "forest",
-    "command": "state" / "setting"
-   
-    "indexes": [
-      { "idx": 1}, {"idx": 2}
-    ]
-  }
+  "params": null
 }
 
 # response
 {
   "jsonrpc":"2.0”,
-  "method": "dev.get",
   "id":null,
-  "result": {
-    "devtype": "forest",
-    "indexes": [
-      {
-        "idx":1,
-	"state": {
-	
-        "connection":true,
-        "roomcons": [
-	      {
-	        "rcidx": 1,
-    	    "power":true,
-    	    "heating":true,
-    	    "schedult":true,
-    	    "intervaltimer":true,
-    	    "intervaltimeval":30,
-    	    "curtemp":25.0,
-    	    "settemp":32.0
-    	  }
-
-    	],
- "keytag":true,
-    	  "motiondetect":true,
-    	  "notmovement":true,
-    	  "gasleakdetect":true,
-    	  "fireevent":true,
-  "batchlight":true,
-          "outsidelight": false,
-    	  "induction":true,
-    	  "securityon":true,
-          "doorlock": true
-},
-
-        "controls": {
-    	  "batchlight":true,
-          "outsidelight": false,
-    	  "induction":true,
-    	  "securityon":true,
-          "doorlock": true
-        },
-        "settings": {
-          "motiontime": 8,
-          "gogouttime": 3,
-          "roomcontempdetecttime": 2,
-          "roomcontempmax": 45,
-          "roomcontempmin": 5,
-          "roomconpresetenable": true,
-          "roomconpresettemp": 25,
-          "roomconpresettime": 30
-        },
-        "events": {
-    	  "keytag":true,
-    	  "motiondetect":true,
-    	  "notmovement":true,
-    	  "gasleakdetect":true,
-    	  "fireevent":true
-        }
-      }
-    ]
-  }
+  "result": [
+    { 
+      "idx":1, 
+      "id":"8a12345678", 
+      "name":"homebox1", 
+      "connected":true,
+      "roomconcnt":1
+    },
+    { 
+      "idx":2, 
+      "id":"8a23455608", 
+      "name":"hombox2", 
+      "connected":true,
+      "roomconcnt":1
+    }
+  ]
 }
 
-# update
+# ------------------------------------------------------------------------------
+#  상태요청
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.getstate.1",
+  "id": null,
+  "params": null
+}
+
+# response
 {
   "jsonrpc":"2.0”,
-  "method": "dev.update",
   "id":null,
   "result": {
-    "devtype": "forest",
-    "indexes": [
-      {
-    	"idx":1,
-	    "connection":true,
-    	"roomcons": [
-	      {
-	        "rcidx": 1,
-	        "power":true
-	      }
-	    ],
-	    "fireevent":true
-      }
-    ]
+    "connection":true,
+    "roomcons": [
+    {
+      "rcidx": 1,
+      "power":true,
+      "heating":true,
+      "schedule":true,
+      "intervaltimer":true,
+      "intervaltimeval":30,
+      "curtemp":25.0,
+      "settemp":32.0
+    }
+    ],
+    "keytag":true,
+    "motiondetect":true,
+    "notmovement":true,
+    "gasleakdetect":true,
+    "firedetect":true,
+    "batchlight":true,
+    "outsidelight": false,
+    "induction":true,
+    "securityon":true,
+    "doorlock": true
   }
 }
 
@@ -124,23 +96,156 @@ get.{devtype}.state.
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "dev.set",
+  "method": "get.forest.setstate.1",
   "params": {
-    "devtype": "forest",
-    "indextes": [
-      "idx": 1,
-      "roomcons": [
-        {
-          "rcidx": 1,
-          "power": true,
-          "settemp": 33
-        }
-      ],
-      "batchlight":true,
-      "induction":true,
-      "securityon":true
-    ]
+    "roomcons": [
+      {
+        "rcidx": 1,
+        "power": true,
+        "settemp": 33
+      }
+    ],
+    "batchlight":true,
+    "induction":true,
+    "securityon":true
   }
+}
+
+# ACK
+{
+  "jsonrpc": "2.0",
+  "id":null,
+  "result": "success"
+}
+
+# ------------------------------------------------------------------------------
+#  설정값 요청
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.getconfig.1",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+    "motiontime": 8,
+    "gogouttime": 3,
+    "roomcontemptime": 2,
+    "roomcontempmax": 45,
+    "roomcontempmin": 5,
+    "roomconpresetenable": true,
+    "roomconpresettemp": 25,
+    "roomconpresettime": 30
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  설정값 설정
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.setconfig.1",
+  "id": null,
+  "params": {
+    "motiontime": 8,
+    "gogouttime": 3,
+    "roomcontemptime": 2,
+    "roomcontempmax": 45,
+    "roomcontempmin": 5,
+    "roomconpresetenable": true,
+    "roomconpresettemp": 25,
+    "roomconpresettime": 30
+  }
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": "success"
+}
+
+# ------------------------------------------------------------------------------
+#  update
+#  -
+# ------------------------------------------------------------------------------
+{
+  "jsonrpc":"2.0”,
+    "method": "get.forest.update.1",
+    "id":null,
+    "result": {
+      "connection":true,
+      "roomcons": [
+      {
+        "rcidx": 1,
+        "power":true
+      }
+      ],
+        "firedetect":true
+    }
+}
+
+# ------------------------------------------------------------------------------
+#  제어 디바이스 정보
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.gateway.getdevinfo",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": [
+    {
+      "type":"thermostat",
+      "devids":
+        [
+          {"id":"360102000001", "connected":true},
+          {"id":"360102000002", "connected":true},
+          {"id":"360102000003", "connected":false}
+        ]
+    },
+    {
+      "type":"light",
+      "devids":
+        [
+          {"id":"0e0102000001", "connected":true},
+          {"id":"0e0102000001", "connected":false}
+        ]
+    },
+    {
+      "type":"forest",
+      "devids":
+        [
+          {"id":"8a0102000001", "connected":true},
+          {"id":"8a0102000002", "connected":true},
+          {"id":"8a0102000003", "connected":true},
+          {"id":"8a0102000004", "connected":true},
+          {"id":"8a0102000005", "connected":true},
+          {"id":"8a0102000006", "connected":false},
+          {"id":"8a0102000007", "connected":true},
+          {"id":"8a0102000008", "connected":true},
+          {"id":"8a0102000009", "connected":true},
+          {"id":"8a0102000011", "connected":true},
+          {"id":"8a0102000012", "connected":false}
+        ]
+    }
+  ]
 }
 
 
