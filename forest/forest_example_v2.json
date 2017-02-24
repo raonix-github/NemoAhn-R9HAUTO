@@ -19,40 +19,6 @@
 
 
 # ------------------------------------------------------------------------------
-#  기기정보 요청(특성)
-#  -
-# ------------------------------------------------------------------------------
-# request
-{
-  "jsonrpc": "2.0",
-  "method": "get.forest.devinfo",
-  "id": null,
-  "params": null
-}
-
-# response
-{
-  "jsonrpc":"2.0”,
-  "id":null,
-  "result": [
-    { 
-      "idx":1, 
-      "id":"8a12345678", 
-      "name":"homebox1", 
-      "connected":true,
-      "roomconcnt":1
-    },
-    { 
-      "idx":2, 
-      "id":"8a23455608", 
-      "name":"hombox2", 
-      "connected":true,
-      "roomconcnt":1
-    }
-  ]
-}
-
-# ------------------------------------------------------------------------------
 #  상태요청
 #  -
 # ------------------------------------------------------------------------------
@@ -96,6 +62,34 @@
 }
 
 # ------------------------------------------------------------------------------
+#  설정값 요청
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.config.1",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+    "motiontime": 8,
+    "gogouttime": 3,
+    "roomcontemptime": 2,
+    "roomcontempmax": 45,
+    "roomcontempmin": 5,
+    "roomconpresetenable": true,
+    "roomconpresettemp": 25,
+    "roomconpresettime": 30
+  }
+}
+
+# ------------------------------------------------------------------------------
 #  제어
 #  -
 # ------------------------------------------------------------------------------
@@ -126,34 +120,6 @@
 }
 
 # ------------------------------------------------------------------------------
-#  설정값 요청
-#  -
-# ------------------------------------------------------------------------------
-# request
-{
-  "jsonrpc": "2.0",
-  "method": "get.forest.config.1",
-  "id": null,
-  "params": null
-}
-
-# response
-{
-  "jsonrpc":"2.0”,
-  "id":null,
-  "result": {
-    "motiontime": 8,
-    "gogouttime": 3,
-    "roomcontemptime": 2,
-    "roomcontempmax": 45,
-    "roomcontempmin": 5,
-    "roomconpresetenable": true,
-    "roomconpresettemp": 25,
-    "roomconpresettime": 30
-  }
-}
-
-# ------------------------------------------------------------------------------
 #  설정값 설정
 #  -
 # ------------------------------------------------------------------------------
@@ -181,28 +147,9 @@
   "result": "success"
 }
 
-# ------------------------------------------------------------------------------
-#  report
-#  -
-# ------------------------------------------------------------------------------
-{
-  "jsonrpc":"2.0”,
-    "method": "report.forest.state.1",
-    "id":null,
-    "result": {
-      "connection":true,
-      "roomcons": [
-      {
-        "rcidx": 1,
-        "power":true
-      }
-      ],
-        "firedetect":true
-    }
-}
 
 # ------------------------------------------------------------------------------
-#  제어 디바이스 정보
+#  gateway 
 #  -
 # ------------------------------------------------------------------------------
 # request
@@ -255,39 +202,14 @@
   ]
 }
 
-
-# ------------------------------------------------------------------------------
-# gateway  
-#  -
-# ------------------------------------------------------------------------------
-# get gateway-time
+# get gateway-state
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "get.gateway.time",
+  "method": "get.gateway.state",
   "params": null
 }
-# reply gateway-time
-{
-  "jsonrpc": "2.0",
-  "id": null,
-  "result": {
-    "year": 2015,
-    "month":9,
-    "day":7,
-    "hour":16,
-    "min":49,
-    "sec":52
-  }
-}
 
-# get system-info
-{
-  "jsonrpc": "2.0",
-  "id": null,
-  "method": "get.gateway.info",
-  "params": null
-}
 # reply system-info
 {
   "jsonrpc": "2.0",
@@ -313,3 +235,64 @@
     "filename": "upgrade.bin"
   }
 }
+
+# ------------------------------------------------------------------------------
+#  report
+#  -
+# ------------------------------------------------------------------------------
+{
+  "jsonrpc":"2.0”,
+  "method": "report.forest.state.1",
+  "id":null,
+  "result": {
+    "connection":true,
+    "roomcons": [
+    {
+      "rcidx": 1,
+      "power":true
+    }
+    ],
+    "firedetect":true
+  }
+}
+
+{
+  "jsonrpc": "2.0",
+  "method": "report.gateway.state",
+  "id": null,
+  "result": {
+    "type":"gateway",
+    "vendor":"raonix",
+    "model" :"dj230",
+    "swver":"2.1.0",
+    "hwver":"1.0.0",
+    "buildcode":"1"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# time sync  
+#  -
+# ------------------------------------------------------------------------------
+# get server-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "get.server.time",
+  "params": null
+}
+
+# reply server-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "year": 2015,
+    "month":9,
+    "day":7,
+    "hour":16,
+    "min":49,
+    "sec":52
+  }
+}
+
