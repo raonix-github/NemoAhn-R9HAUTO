@@ -3,15 +3,25 @@
 #  -
 # ------------------------------------------------------------------------------
 
+
+get.state.{devtype}.{idx}
+get.setting.{devtype}.{idx}
+get.gateway.getdevinfo
+get.gateway.
+
+
+get.{devtype}.state.
 # request
 {
   "jsonrpc": "2.0",
-  "method": "dev.get",
+  "method": "dev.get.state/setting",
   "id": null,
   "params": {
-    "devtype": "forest",
+	   "devtype": "forest",
+    "command": "state" / "setting"
+   
     "indexes": [
-      { "idx": 1 }
+      { "idx": 1}, {"idx": 2}
     ]
   }
 }
@@ -26,6 +36,8 @@
     "indexes": [
       {
         "idx":1,
+	"state": {
+	
         "connection":true,
         "roomcons": [
 	      {
@@ -38,7 +50,20 @@
     	    "curtemp":25.0,
     	    "settemp":32.0
     	  }
+
     	],
+ "keytag":true,
+    	  "motiondetect":true,
+    	  "notmovement":true,
+    	  "gasleakdetect":true,
+    	  "fireevent":true,
+  "batchlight":true,
+          "outsidelight": false,
+    	  "induction":true,
+    	  "securityon":true,
+          "doorlock": true
+},
+
         "controls": {
     	  "batchlight":true,
           "outsidelight": false,
