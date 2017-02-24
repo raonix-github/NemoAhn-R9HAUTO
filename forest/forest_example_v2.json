@@ -1,14 +1,20 @@
-
 # ------------------------------------------------------------------------------
-#  methods
-#  - get.{devtype}.getdevinfo
-#  - get.{devtype}.getstate.{idx}
-#  - get.{devtype}.getconfig.{idx}
-#  - get.{devtype}.setstate.{idx}
-#  - get.{devtype}.setconfig.{idx}
-#  - get.{devtype}.update.{idx}
+#  methods  - get / set / report
+#
+#  - get.{devtype}.devinfo
+#  - get.{devtype}.state.{idx}
+#  - get.{devtype}.config.{idx}
+#
+#  - set.{devtype}.state.{idx}
+#  - set.{devtype}.config.{idx}
+#
+#  - report.{devtype}.state.{idx}
+#
 #  - get.gateway.getdevinfo
-#  - get.gateway.
+#
+#  - get.system.time
+#  - get.system.info
+#  - set.system.upgrade
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -18,7 +24,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.forest.getdevinfo",
+  "method": "get.forest.devinfo",
   "id": null,
   "params": null
 }
@@ -52,7 +58,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.forest.getstate.1",
+  "method": "get.forest.state.1",
   "id": null,
   "params": null
 }
@@ -96,7 +102,7 @@
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "get.forest.setstate.1",
+  "method": "set.forest.state.1",
   "params": {
     "roomcons": [
       {
@@ -125,7 +131,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.forest.getconfig.1",
+  "method": "get.forest.config.1",
   "id": null,
   "params": null
 }
@@ -153,7 +159,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.forest.setconfig.1",
+  "method": "set.forest.config.1",
   "id": null,
   "params": {
     "motiontime": 8,
@@ -167,7 +173,7 @@
   }
 }
 
-# response
+# ACK
 {
   "jsonrpc":"2.0”,
   "id":null,
@@ -175,12 +181,12 @@
 }
 
 # ------------------------------------------------------------------------------
-#  update
+#  report
 #  -
 # ------------------------------------------------------------------------------
 {
   "jsonrpc":"2.0”,
-    "method": "get.forest.update.1",
+    "method": "report.forest.state.1",
     "id":null,
     "result": {
       "connection":true,
@@ -201,7 +207,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.gateway.getdevinfo",
+  "method": "get.gateway.devinfo",
   "id": null,
   "params": null
 }
@@ -257,9 +263,9 @@
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "sys.gettime"
+  "method": "get.system.time",
+  "params": null
 }
-
 # reply system-time
 {
   "jsonrpc": "2.0",
@@ -271,5 +277,38 @@
     "hour":16,
     "min":49,
     "sec":52
+  }
+}
+
+# get system-info
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "get.system.info",
+  "params": null
+}
+# reply system-info
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "type":"gateway",
+    "vendor":"raonix",
+    "model" :"dj230",
+    "swver":"2.1.0",
+    "hwver":"1.0.0",
+    "buildcode":"1"
+  }
+}
+
+# set system-upgrade
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "set.system.upgrade",
+  "params": {
+    "now": true,
+    "newversion": "2.0.1",
+    "filename": "upgrade.bin"
   }
 }
