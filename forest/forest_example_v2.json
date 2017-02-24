@@ -1,21 +1,22 @@
 # ------------------------------------------------------------------------------
 #  methods  - get / set / report
-#
-#  - get.{devtype}.devinfo
+#  Node to Gateway
 #  - get.{devtype}.state.{idx}
 #  - get.{devtype}.config.{idx}
 #
 #  - set.{devtype}.state.{idx}
 #  - set.{devtype}.config.{idx}
 #
+#  - get.gateway.devlist
+#  - get.gateway.state
+#  - set.gateway.upgrade
+#
+# Gateway to Node
+#  - get.server.time
 #  - report.{devtype}.state.{idx}
-#
-#  - get.gateway.getdevinfo
-#
-#  - get.system.time
-#  - get.system.info
-#  - set.system.upgrade
+#  - report.gateway.state
 # ------------------------------------------------------------------------------
+
 
 # ------------------------------------------------------------------------------
 #  기기정보 요청(특성)
@@ -207,7 +208,7 @@
 # request
 {
   "jsonrpc": "2.0",
-  "method": "get.gateway.devinfo",
+  "method": "get.gateway.devlist",
   "id": null,
   "params": null
 }
@@ -221,34 +222,34 @@
       "type":"thermostat",
       "devids":
         [
-          {"id":"360102000001", "connected":true},
-          {"id":"360102000002", "connected":true},
-          {"id":"360102000003", "connected":false}
+          {"idx":1,"id":"360102000001", "connected":true},
+          {"idx":2,"id":"360102000002", "connected":true},
+          {"idx":3,"id":"360102000003", "connected":false}
         ]
     },
     {
       "type":"light",
       "devids":
         [
-          {"id":"0e0102000001", "connected":true},
-          {"id":"0e0102000001", "connected":false}
+          {"idx":1,"id":"0e0102000001", "connected":true},
+          {"idx":2,"id":"0e0102000001", "connected":false}
         ]
     },
     {
       "type":"forest",
       "devids":
         [
-          {"id":"8a0102000001", "connected":true},
-          {"id":"8a0102000002", "connected":true},
-          {"id":"8a0102000003", "connected":true},
-          {"id":"8a0102000004", "connected":true},
-          {"id":"8a0102000005", "connected":true},
-          {"id":"8a0102000006", "connected":false},
-          {"id":"8a0102000007", "connected":true},
-          {"id":"8a0102000008", "connected":true},
-          {"id":"8a0102000009", "connected":true},
-          {"id":"8a0102000011", "connected":true},
-          {"id":"8a0102000012", "connected":false}
+          {"idx":1, "id":"8a0102000001", "connected":true},
+          {"idx":2,"id":"8a0102000002", "connected":true},
+          {"idx":3,"id":"8a0102000003", "connected":true},
+          {"idx":4,"id":"8a0102000004", "connected":true},
+          {"idx":5,"id":"8a0102000005", "connected":true},
+          {"idx":6,"id":"8a0102000006", "connected":false},
+          {"idx":7,"id":"8a0102000007", "connected":true},
+          {"idx":8,"id":"8a0102000008", "connected":true},
+          {"idx":9,"id":"8a0102000009", "connected":true},
+          {"idx":10,"id":"8a0102000011", "connected":true},
+          {"idx":11,"id":"8a0102000012", "connected":false}
         ]
     }
   ]
@@ -256,17 +257,17 @@
 
 
 # ------------------------------------------------------------------------------
-# System  
+# gateway  
 #  -
 # ------------------------------------------------------------------------------
-# get system-time
+# get gateway-time
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "get.system.time",
+  "method": "get.gateway.time",
   "params": null
 }
-# reply system-time
+# reply gateway-time
 {
   "jsonrpc": "2.0",
   "id": null,
@@ -284,7 +285,7 @@
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "get.system.info",
+  "method": "get.gateway.info",
   "params": null
 }
 # reply system-info
@@ -301,11 +302,11 @@
   }
 }
 
-# set system-upgrade
+# set gateway-upgrade
 {
   "jsonrpc": "2.0",
   "id": null,
-  "method": "set.system.upgrade",
+  "method": "set.gateway.upgrade",
   "params": {
     "now": true,
     "newversion": "2.0.1",
