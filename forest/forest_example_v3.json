@@ -27,7 +27,65 @@
 #
 # ------------------------------------------------------------------------------
 
+# ------------------------------------------------------------------------------
+#  유도등
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "set/guidelight/config",
+  "id": null,
+  "params": [
+	  { "room" : 101, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] },
+	  { "room" : 102, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] },
+	  { "room" : 103, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] }
+  ]
+}
 
+# ACK
+{
+  "jsonrpc": "2.0",
+  "id":null,
+  "result": "success"
+}
+
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get/guidelight/config",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": [
+	  { "room" : 101, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] },
+	  { "room" : 102, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] },
+	  { "room" : 103, "onmap" : [0x00, 0x01,0x02,0x03,0x04,0x05,0x06,0x07] }
+  ]
+}
+
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "set/guidelight/state",
+  "id": null,
+  "params": {
+	  "on" : true;
+	  "rooms" : [101, 102, 103]
+  }
+}
+
+# ACK
+{
+  "jsonrpc": "2.0",
+  "id":null,
+  "result": "success"
+}
 # ------------------------------------------------------------------------------
 #  디바이스 정보
 #  -
@@ -48,8 +106,9 @@
 	"idx": 1,
 	"id": "123412341234",
     "roomconcnt" : 3,
-    "indoorlightcnt" : 1,
-    "outdoorlightcnt" : 1
+    "lightcnt" : 1,
+    "roomconmaxtemp": 45,
+    "roomconmintemp": 5
   }
 }
 
@@ -82,7 +141,9 @@
       "intervaltimer":true,
       "intervaltimeval":30,
       "curtemp":25.0,
-      "settemp":32.0
+      "settemp":32.0,
+
+	  "alarmdetect" : false
     }
     ],
     "keytag":true,
@@ -90,6 +151,7 @@
     "notmovement":true,
     "gasleakdetect":true,
     "firedetect":true,
+
     "batchlight":true,
     "outsidelight": false,
     "induction":true,
@@ -116,18 +178,12 @@
   "id":null,
   "result": {
 	"idx": 1,
-    "motiontime": 8,
-    "gogouttime": 3,
-    "roomcontemptime": 2,
-    "roomcontempmax": 45,
-    "roomcontempmin": 5,
-    "roomconpresetenable": true,
-    "roomconpresettemp": 25,
-    "roomconpresettime": 30,
-	"events": [
-		{ "type" : "firealarmon", "actions": { "dooropen" : true, "gasvalve" : false, "batchlight" : true}},
-		{ "type" : "gasalarmon", "actions": { "dooropen" : true, "gasvalve" : false }}
-	]
+    "motionalarmtime": 8,
+    "goouttime": 3,
+    "preheatingtemp": 25,
+    "preheatingtime": 30,
+    "roomconalarmtemp": 5,
+    "roomconalarmtime": 30
   }
 }
 
@@ -148,22 +204,16 @@
         "settemp": 33
       }
     ],
-	"indoorlights": [
+	"lights": [
       {
-        "subidx": 1,
-        "on": true
+        "subidx" : 1,
+        "on" : true
       }
     ],
-	"outdoorlights": [
-      {
-        "subidx": 1,
-        "on": true
-      }
-    ],
-
-    "batchlight":true,
-    "induction":true,
-    "securityon":true
+    "batchlight" : true,
+    "induction" : true,
+    "securityon" : true,
+	"preheating" : true
   }
 }
 
@@ -204,18 +254,12 @@
   "method": "set.forest.config.1",
   "id": null,
   "params": {
-    "motiontime": 8,
-    "gogouttime": 3,
-    "roomcontemptime": 2,
-    "roomcontempmax": 45,
-    "roomcontempmin": 5,
-    "roomconpresetenable": true,
-    "roomconpresettemp": 25,
-    "roomconpresettime": 30,
-	"events": [
-		{ "type" : "firealarmon", "actions": { "dooropen" : true, "gasvalve" : false, "batchlight" : true}},
-		{ "type" : "gasalarmon", "actions": { "dooropen" : true, "gasvalve" : false }}
-	]
+    "motionalarmtime": 8,
+    "goouttime": 3,
+    "preheatingtemp": 25,
+    "preheatingtime": 30,
+    "roomconalarmtemp": 5,
+    "roomconalarmtime": 30
   }
 }
 
