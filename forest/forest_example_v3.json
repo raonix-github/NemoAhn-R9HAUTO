@@ -112,6 +112,31 @@
   }
 }
 
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "set/forest/devinfo/1",
+  "id": null,
+  "params": {
+    "supported" : 1234,   # bit map
+    "roomconcnt" : 3,
+    "lightcnt" : 1
+  }
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+	"idx": 1,
+	"id": "123412341234",
+    "roomconcnt" : 3,
+    "lightcnt" : 1,
+    "roomconmaxtemp": 45,
+    "roomconmintemp": 5
+  }
+}
 
 # ------------------------------------------------------------------------------
 #  상태요청
