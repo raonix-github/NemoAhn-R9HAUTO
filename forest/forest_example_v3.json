@@ -159,7 +159,7 @@
     "connection":true,
     "roomcons": [
     {
-      "rcidx": 1,
+      "subidx": 1,
       "power":true,
       "heating":true,
       "schedule":true,
@@ -224,7 +224,7 @@
   "params": {
     "roomcons": [
       {
-        "rcidx": 1,
+        "subidx": 1,
         "power": true,
         "settemp": 33
       }
@@ -398,7 +398,7 @@
     "connection":true,
     "roomcons": [
     {
-      "rcidx": 1,
+      "subidx": 1,
       "power":true
     }
     ],

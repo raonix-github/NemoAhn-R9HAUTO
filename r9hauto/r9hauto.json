@@ -1,0 +1,5039 @@
+# ==============================================================================
+# Changes
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Version : 1
+# ------------------------------------------------------------------------------
+# 2014-01-13: gomma
+#   * interphone 추가
+#
+# 2014-02-18: gomma
+#   * 온도조절기 사용량 요청 추가
+#
+# 2014-05-09: gomma
+#   * version field  추가
+#   * version field의 유무로 이전 버전과 구별 향후는 version사용하여 구별.
+#
+# 2014-05-09: gomma
+#   * devices --> payload로 변경
+#   * devname --> devtype로 변경
+#   * payload 를 json array 에서 json object로 변경
+#
+# 2014-05-20: gomma
+#   * add min, max temperature to thermostat's devinfo
+#
+# 2014-05-21: gomma
+#   * tag(u32) 를 msgid (string)으로 변경
+#
+# 2014-06-18: gomma
+#   * 온수매트 추가.
+#
+# 2014-06-19: gomma
+#   * XMPP ID 관련 Device 정보 요청
+#
+# 2014-06-23: gomma
+#   * 온수매트 : setstate 명령 수정.
+#   * 온수매트 : json running -> heating 으로 변경
+#
+# 2014-07-07: gomma
+#   * system : delete device (deldev) 명령 추가
+#
+# 2014-07-09: gomma
+#   * 모든 Device : getstate응답에 "connection" 필드 추가.
+#
+# 2014-07-23: gomma
+#   * 온수매트: 취침모드 추가.
+#
+# 2014-08-05: gomma
+#   * 온수매트: getstat명령에 error 추가
+#   * 장치정보: getinfo명령에 S/W, H/W버전, 필드추가.
+#
+# 2014-11-23: gomma
+#   * 전등: setstate시 dimen 삭제 - 불필요.
+#   * 전등: devinfo, dimmode를 bitmap으로 변경
+#
+#
+# 2014-12.08
+# * 범용스위치: "qty" val 룰 integer로 변경
+# * 범용스위치: "qty" name 을 "registered"로 변경
+# * 범용스위치: setstate 변경
+#
+# 2014-12.08
+# * Gateway 추가
+# * system 명령 getdevinfo, deldev를 Gateway로 이동.
+#               이명려은 Gateway에서만 의미있음.
+#
+# 2014-12.16
+# * SYSTEM : getinfo --> getsysinfo 변경
+# * SYSTEM : updatedevinfo "qty" name 을 "registered" 로 변경.
+#
+# 2015-01.02
+# * SYSTEM : model 항목 추가. model은 optione.
+#
+# 2015-01.08
+# * SYSTEM : getdevinfo, updatedevinfo에 devids 필드 추가 - device고유 id
+#
+# 2015-01.16
+# * thermostat : 예약스케줄 설정 기능
+#
+# 2015-01.20
+# * thermostat : 설정 관련 이름 정리
+#            schedule : 예약모드, hotwater : 온수모드(추가됨), outdoor : 외출모드
+#
+# 2015-01.31
+# * schedule function : wday (weekday map) 추가
+#             sun ~ sat bitmap
+#
+# 2015-02.01
+# * generalio : schedule enable/disable
+#               devinfo에 scheudle, incnt 추가
+#               getsate에 inputs, curtemp 필드 추가
+#
+# 2015-02.02
+# * schedule : 주단위 groud 추가
+#              gridx : groud index
+#
+## 2015-03.17
+# * schedule : 기타 수정.
+#
+# 2015-03.26
+# * pushmsg : nam(str), type(int) 필드 추가
+# * gasvalve : timer(int) 필드 추가
+# * getsysinfo : buildcode(int) 필드 추가
+# * devinfo : 각 디바이스마다 connected(bool) 필드 추가
+#
+# 2015-05.13 : alaveiw
+# * Boiler 장치 내용 추가 작업중(미완료)
+# * Hood 장치 내용 추가.
+#
+# 2015-05.14 : alaveiw
+# * Hood : light 추가
+#
+# 2015-07.9 : alaveiw
+# * thermostat : intervaltimer, 24h reservation 추가
+#
+# 2015-07.17 : alaveiw
+# * Haatz Air-Care System Procotol 추가
+# * AirSensor, Hood, Vent, Purifier 4종
+#
+# 2015-07.22 : alaveiw
+# * upgrade : "now" 필드 추가(즉시 실행 or 인터벌 실행)
+#
+# 2015-09.07 : alaveiw
+# * gettimeinfo : gettimeinfo 명령을 통해 서버의 ntp 시간정보를 게이트웨이가 가져온다.
+#
+# 2015-11.18 : alaveiw
+# * 대기전력(stpower) 기기 추가
+# * generalio mode setting, pushmsg 설정 추가
+# * thermostat heating 추가
+#
+# 2015-12.07 : alaveiw
+# * 일괄제어기를 라온익스 일괄제어기로 변경(batch -> r9batch) : 각각 다른 장치 임.
+# * TTA표준 일괄제어기 기기 추가(batch)
+#
+# 2016-04-20 : alaveiw
+# * thermostat 변경 기록 서버 디비 저장용 패킷 정의
+# * updatedevstate
+#
+# 2016-04-25 : alaveiw
+# * 앱 페어링 기능 추가
+#
+# 2016-11-08 : alaveiw
+# * homebox 전용 메세지 추가
+#
+# 2016-11-09 : alaveiw
+# * 온풍기 기기 추가 (태양전열), fanheater
+#
+# 2017-10-11 : gomma
+# *  updatedevstate json 변경 
+#
+# ------------------------------------------------------------------------------
+# Version :
+# ------------------------------------------------------------------------------
+# 2014-11-01: gomma
+#   * General IO: multi switch 추가
+#   * 온도조절기 : 각방 제어기 개념 도입
+#                  온도조절기에 각방 제어기를 포험.
+#                           온수매트의 heaters 개념과 동일
+#   * 전등 : dimmode 추가 : 해당 전등스위치가 true일 경우 디밍
+#            onoff ==> swcnt로 변경.
+#
+# 2014-11-03: gomma
+#   * 온도조절기 : json tag 이름 변경
+#                  - control을 roomcon으로 변경
+#                  - controls --> roomcons
+#                  - ctidx --> rcidx
+# ==============================================================================
+
+# ==============================================================================
+# 통신 프로토콜
+# ==============================================================================
+
+# 공통 사항
+# 1. 본 프로토콜의 패킷 표준은 indexes 까지 표준으로 따르고 이외는 디바이스에
+#    따라 정의 된다.
+# 2.
+
+# 설정을 요청할 경우 순서도.
+# 제어 명령
+# A ----- request / setstate ----> B
+
+# ==============================================================================
+
+# ==============================================================================
+# 통신 프로토콜
+# ==============================================================================
+
+# 설정을 요청할 경우 순서도.
+# 제어 명령
+# A ----- request / setstate ----> B
+# A <----- ack ------------------- B
+
+# 상태를 요청할 경우 순서도.
+# 상태 요청
+# A ----- request / getstate ----> B
+# A <----- ack ------------------- B
+
+# 상태 요청에 대한 응답
+# A <---- reply / getstate ------- B
+# A ------ ack ------------------> B
+
+# ACK Timeout : 1000 msec
+# ACK Timeout이 후에 ACK가 올 경우 명령 실패 처리.
+
+# 통신 기본형
+R9HAUTO_JSON
+{
+	"version":1,    # integer
+	"type":<"request","reply","ack">,
+	"msgid":"string    # message id (string)
+	# ACK에서 동일하게 사용{“from”:”0101003d@raonix.co.kr”, “from_type”:”gateway”, “devid”:”01020304”, “msg_type”, 1, “msg”:”PUSH TEST”}
+	"payload":
+	{
+		# 데이타 기본형
+	}
+}
+
+# 데이타 기본형
+{
+	"devtype":<all,thermostat,light,gasvalve,generalio,...>,
+	"command":<devinfo,getstate,setstate,...>,
+	"indexes":
+	[
+		{
+			"idx":<number>,
+			...
+		},
+		...
+	]
+}
+
+# ACK 기본형
+R9HAUTO_JSON
+{
+	"version":1,    # integer
+	"type":"ack",
+	"msgid":"string    # message id (string)
+	"code":<code>,  # == 0 OK |== error code (아직 정의 되지 않음)
+	"message":"error message"
+}
+
+# error 기본형 - 명령 처리 중 or 에러 발생시
+R9HAUTO_JSON
+{
+	"version":1,    # integer
+	"command":"reply",
+	"msgid":"string    # message id (string)
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "error",
+		"code":<errorcode>,
+		"message":"error message"
+	}
+}
+
+################################################################################
+#
+# 공통
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 시간 정보
+# 게이트웨이에서 서버로 시간정보를 요청하고 받을때 사용함
+# ------------------------------------------------------------------------------
+
+# 시간정보요청(게이트웨이->서버)
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"gettimeinfo"
+	}
+}
+
+# 시간정보응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"gettimeinfo",
+		"info":
+		{
+			"year": 2015,
+			"month":9,
+			"day":7,
+			"hour":16,
+			"min":49,
+			"sec":52
+		}
+	}
+}
+# ------------------------------------------------------------------------------
+
+
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+# 스마트폰에서 Device에 붙어 있는 기기 정보를 요청할때 사용.
+# ------------------------------------------------------------------------------
+
+# 전체 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"all",
+		"command":"devinfo"
+	}
+}
+
+# 전체 기기 정보 응답
+#
+# 각 디바이스의 devinfo를 각각 응답.
+#
+
+# ------------------------------------------------------------------------------
+
+
+################################################################################
+#
+# 온도조절기 (보일러) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - maxtemp, mintemp : 설정 온도 범위
+#  - roomconcnt : 롬 컨트롤 갯수
+#  - outdoor : 외출 기능 지원
+#  - schedule : 예약 기능 지원
+#  - hotwater : 온수 모드 지원
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermostat",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermostat",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"id":"0123456789",
+				"name":"온도조절기1",
+				"maxtemp":40,
+				"mintemp":5,
+				"roomconcnt":1,
+				"outdoor":true,
+				"hotwater":true,
+				"floaten":true,
+				"schedule":true,
+				"raonix_reserve":true,
+				"interval_timer":true,
+				"connected":true
+			},
+			{
+				"idx": 2,
+				"id":"0123456782",
+				"name":"온도조절기2",
+				"maxtemp":40,
+				"mintemp":5,
+				"roomconcnt":3,
+				"outdoor":true,
+				"hotwater":true,
+				"floaten":true,
+				"schedule":true,
+				"raonix_reserve":true,
+				“toomysql":true,
+				"connected":true
+			},
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 온도조절기 상태
+#  - power : on /off
+#  - settemp : 설정 온도
+#  - curtemp : 현재 온도
+#  - schedule : 예약 기능 설정
+#  - outdoor : 외출 모드 설정
+#  - hotwater : 온수 모드 설정
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1},
+			{"idx":3}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getstate",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"connection": true,
+				"roomcons":
+				[
+					{"rcidx":1, "power": true, "settemp": 30, "curtemp":25, "schedule":true, "outdoor":false,
+						"hotwater":false,
+						"heating":false,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+				]
+			},
+			{
+				"idx": 3,
+				"connection": true,
+				"roomcons":
+				[
+					{"rcidx":1, "power": true, "settemp": 30, "curtemp":25, "schedule":true, "outdoor":false,
+						"hotwater":false,
+						"heating":false,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+					{"rcidx":2, "power": true, "settemp": 34, "curtemp":26, "schedule":true, "outdoor":false,
+						"hotwater":false,
+						"heating":true,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+					{"rcidx":3, "power": false, "settemp": 34, "curtemp":28, "schedule":true, "outdoor":true,
+						"hotwater":false,
+						"heating":false,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+					{"rcidx":4, "power": false, "settemp": 33, "curtemp":27, "schedule":true, "outdoor":false,
+						"hotwater":false,
+						"heating":true,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+				]
+			}
+		]
+	}
+}
+
+# 예약 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getreserv",
+		"indexes":
+		[
+			{"idx":1
+				"roomcons":
+				[
+					{
+						"rcidx":1
+					}
+				]
+				re}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getreserv",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"connection": true,
+				"roomcons":
+				[
+					{
+						"rcidx":1,
+						"reservtime":208364,
+					}
+				]
+			}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# 온도조절기 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"roomcons":
+				[
+					{"rcidx":1, "power":false, "settemp":30}
+				]
+			},
+			{
+				"idx":2,
+				"roomcons":
+				[
+					{
+						"rcidx":1,
+						"power":true,
+						"schedule": false,
+						"intervaltimer": true,
+						"intervaltimeval": 30,
+						"reservtime": 10560597,
+						"settemp": 24
+					}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 사용량 요청
+#  - start ~ end시간 사이의 값을 전달
+#  - 시간은 epoch를 이용하여 표시
+#  - 시간 표시의 최소 단위는 hour --> 분,초는 모두 0으로
+# ------------------------------------------------------------------------------
+
+# 사용량 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getmeter",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"start":"/Date(694224000000)/",   # 사용량 요청 기간 시작(epoch timestamp)
+				"end":"/Date(694224000000)/"      # 사용량 요청 기간 끝
+			},
+			{"idx":2}
+		]
+	}
+}
+
+# 사용량 응답
+R9HAUTO_JSON
+{
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "getmeter",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"amoutused": 33600,   # 총사용 시간(sec) 33600초/60=560분=9시간20분
+				"meancurtemp": 24,    # 기간 동안 평균 온도
+				"peakcurtemp": 28     # 기간내 최고 온도
+				"meansettemp": 26,    # 기간 동안 평균 설정 온도
+				"peaksettemp": 30     # 기간내 최고 설정 온도
+			},
+			{
+				"idx": 2,
+				"amoutused": 630,     # 총사용 시간(unit : sec) : 10분30초 사용
+				"meancurtemp": 15,    # 기간 동안 평균 온도
+				"peakcurtemp": 18     # 기간내 최고 온도
+				"meansettemp": 16,    # 기간 동안 평균 설정 온도
+				"peaksettemp": 19     # 기간내 최고 설정 온도
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 온도조절기 (보일러) - End
+#
+################################################################################
+
+
+
+################################################################################
+#
+# 가스밸브 - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gasvalve",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gasvalve",
+		"command":"devinfo",
+		"indexes":
+		[
+			{ "idx": 1, "name": "가스1", "connected":true, "operatingtime":true }
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# 가스밸브 상태
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "gasvalve",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "gasvalve",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx": 1, "connection": true, "open": true, "operatingtime":1234}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 가스밸브 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "gasvalve",
+		"command": "setstate",
+		"indexes":
+		[
+			{"idx":1, "open": false}
+		]
+	}
+}
+
+################################################################################
+#
+# 가스밸브 - End
+#
+################################################################################
+
+
+
+################################################################################
+#
+# General IO(On/Off 스위치) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : switch 갯수
+#  - temperature : 온도센서 지원
+#  - incnt : input 갯수
+#  - schedule : 예약 기능 지원
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"generalio",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"generalio",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx":1, "name":"범용스위치1", "swcnt":1, "temperature":true, "incnt":2, "schedule":true, "connected":true},
+			{"idx":2, "name":"범용스위치2", "swcnt":4, "temperature":false,"incnt":1, "schedule":false, "connected":true}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# General IO 상태
+#  - connection : 연결 상태
+#  - curtemp : 현재온도, 온도센서 지원되는 모델
+#  - swidx : 스위치 index
+#  - on : 스위치 on/off
+#  - schedule : 예약 기능 상태
+#  - inidx : input 센서 index
+#  - on : input센서 on/off 상태
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "generalio",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg18",
+	"payload": {
+		"devtype": "generalio",
+		"command": “getstate",
+		"indexes": [
+			{
+				"switches": [
+					{
+						"on": true,
+						"swidx": 1,
+						"schedule": false
+					},
+					{
+						"on": false,
+						"swidx": 2,
+						"schedule": false
+					}
+				],
+				"dinactive": 0,
+				"schedulepush": false,
+				"idx": 2,
+				"inputs": [
+					{
+						"inidx": 1,
+						"on": true
+					},
+					{
+						"inidx": 2,
+						"on": true
+					}
+				],
+				"dinkeeptime": false,
+				"connection": true,
+				"userpush": false,
+				"curtemp": 18,
+				"systempush": true,
+				"dintact": false,
+				"doutactive": 1,
+				"doutstyle": false
+			}
+		]
+	}
+}
+
+# 코노텍 연결시 필드 추가됨 (conotec, FOX-2001CC)
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg210",
+	"payload": {
+		"indexes": [
+			{
+				"switches": [
+					{
+						"on": false,
+						"swidx": 1,
+						"schedule": true
+					},
+					{
+						"on": false,
+						"swidx": 2,
+						"schedule": false
+					}
+				],
+				"inputs": [
+					{
+						"inidx": 1,
+						"on": false
+					},
+					{
+						"inidx": 2,
+						"on": false
+					}
+				],
+				"dinactive": 1,
+				"idx": 2,
+				"schedulepush": false,
+				"dinkeeptime": false,
+				"connection": true,
+				"userpush": false,
+				"curtemp": 25,
+				"systempush": false,
+				"dintact": false,
+				"doutactive": 1,
+				"doutstyle": false,
+				"tempsensor": {
+					"sensorcurtemp": 22.5,
+					"version": "CONOTEC_FOX_2001CC",
+					"errsensoropen": false,
+					"errmintemp": false,
+					"pushmintemp": 15,
+					"temppush": true,
+					"errmaxtemp": false,
+					"pushmaxtemp": 33,
+					"temppushretry": true,
+					"tempout": true,
+					"errconnect": false,
+					"errsensorshort": false
+				}
+			}
+		],
+		"devtype": "generalio",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"generalio",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true, "schedule":true},
+					{"swidx":2, "on":true}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 설정메뉴 셋팅
+#  -
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON{
+	"type": "request",
+	"version": 1,
+	"msgid": "726US1AU5A",
+	"payload": {
+		"indexes": [
+			{
+				"userpush": false,
+				"doutactive": 1,
+				"idx": 2,
+				"schedulepush": false,
+				"dinactive": 0,
+				"systempush": true,
+				"dintact": false,
+				"dinkeeptime": false,
+				"doutstyle": false
+			}
+		],
+		"devtype": "generalio",
+		"command": "setmode"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 푸쉬 메세지 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"generalio",
+		"command":"setpushmsg",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "msg":"푸쉬"}
+				]
+			}
+		]
+	}
+}
+# ------------------------------------------------------------------------------
+# IO 푸쉬 메세지 조회
+#  -
+# ------------------------------------------------------------------------------
+
+# 푸쉬 메세지 조회
+R9HAUTO_JSON
+{
+	"type": "request",
+	"version": 1,
+	"msgid": "1J3J6J4EFF",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 2,
+				"switches": [
+					{
+						"swidx": 1
+					}
+				]
+			}
+		],
+		"devtype": "generalio",
+		"command": "getpushmsg"
+	}
+}
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg0",
+	"payload": {
+		"indexes": [
+			{
+				"switches": [
+					{
+						"swidx": 1,
+						"msg": "가가가가"
+					}
+				],
+				"idx": 2
+			}
+		],
+		"devtype": "generalio",
+		"command": "getpushmsg"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 코노텍 알람 온도 설정
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON{
+	"version": 1,
+	"type": "request",
+	"payload": {
+		"devtype": "generalio",
+		"indexes": [
+			{
+				"pushmaxtemp": 28,
+				"temppush": true,
+				"pushmintemp": 19,
+				"idx": 2,
+				"temppushretry": true
+			}
+		],
+		"command": "settempsensor"
+	},
+	"msgid": "TEGFA4T8FP"
+}
+################################################################################
+#
+# General IO - End
+#
+################################################################################
+
+
+
+
+################################################################################
+#
+# Fan Heater(온풍기) - Start
+#
+################################################################################
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - inletmax : Inlet 설정온도 상한값(HEX)
+#  - 
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype”:”fanheater",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg87",
+	"payload": {
+		"indexes": [
+			{
+				"id": "ffffffffff",
+				"outletmin": 45,
+				"deviceversion": 0,
+				"idx": 1,
+				"schedule": true,
+				"connected": true,
+				"heatermax": 78,
+				"name": “온풍기1",
+				"inletmax": 50,
+				"inletmin": 40,
+				"heatermin": 44,
+				"outletmax": 60,
+				"heaterstartmax": 66,
+				"heaterstartmin": 45
+			}
+		],
+		"devtype": "fanheater",
+		"command": "devinfo"
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+#  상태
+#  - 
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "fanheater",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg88",
+	"payload": {
+		"indexes": [
+			{
+				"schedulepush": false,
+				"err_in_open": false,
+				"starttemp_heater": 0,
+				"dinactive": 0,
+				"idx": 1,
+				"doutstyle": false,
+				"settemp_heater": 0,
+				"settemp_out": 0,
+				"inputs": [
+					{
+						"inidx": 1,
+						"on": false
+					},
+					{
+						"inidx": 2,
+						"on": false
+					},
+					{
+						"inidx": 3,
+						"on": false
+					},
+					{
+						"inidx": 4,
+						"on": false
+					}
+				],
+				"connection": true,
+				"systempush": false,
+				"curtemp_out": 22,
+				"err_out_short": false,
+				"pumprelay": true,
+				"power": false,
+				"err_out_open": false,
+				"fanrelay": true,
+				"err_heater_open": true,
+				"heaterrelay": true,
+				"err_in_short": true,
+				"alarm": false,
+				"curtemp_heater": 33,
+				"err_heater_short": false,
+				"curtemp_in": 11,
+				"settemp_in": 0,
+				"doutactive": 0,
+				"userpush": false,
+				"dintact": false,
+				"dinkeeptime": false
+			}
+		],
+		"devtype": "fanheater",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"fanheater",
+		"command":"setstate",
+		"indexes":
+		[
+			"settemp_in": 40,
+			"idx": 1
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 설정메뉴 셋팅
+#  -
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON{
+	"type": "request",
+	"version": 1,
+	"msgid": "726US1AU5A",
+	"payload": {
+		"indexes": [
+
+
+		],
+		"devtype": "fanheater",
+		"command": "setmode"
+	}
+}
+
+
+################################################################################
+#
+# Fan Heater - End
+#
+################################################################################
+
+
+
+
+################################################################################
+#
+# Curtain(전동커튼) - Start
+#
+################################################################################
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - 
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload": {
+		"devtype": "curtain",
+		"command": "devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg87",
+	"payload": {
+		"indexes": [
+			{
+				"id": "ffffffffff",
+				"idx": 1,
+				"connected": true,
+				"name": “전동커튼1”,
+				“unknown”: false,
+				“angle”: true,
+				“level”: true
+			}
+		],
+		"devtype": “curtain",
+		"command": "devinfo"
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+#  상태
+#  - 
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": “curtain",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg88",
+	"payload": {
+		"indexes": [
+			{
+				“openning”:true,
+				“closing”:false,
+				“opened”:false,
+				“closed”:false,
+				“angle”:6,
+				“level”:10,
+				"idx": 1,
+				"connection": true
+			}
+		],
+		"devtype": “curtain",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload": {
+		"devtype": "curtain",
+		"command": "setstate",
+		"indexes": [
+			{
+				"open": 1,
+				"angle": 4,
+				"level": 8,
+				"idx": 1
+			}
+		]
+	}
+}
+
+
+
+################################################################################
+#
+# Curtain - End
+#
+################################################################################
+
+
+################################################################################
+#
+# 대기전력차단기(stpower) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : 대기전력차단기 채널 갯수
+#  -
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"id":"5239000123",
+				"name": "대기전력차단기1",
+				"swcnt": 1,
+				"switches":
+				[
+					{
+						"swidx":1,
+						"automode":true,
+						"validpower":true,
+						"overflow":true
+					}
+				]
+			},
+			{
+				"idx": 2,
+				"id":"5239001123",
+				"name": "대기전력차단기2",
+				"swcnt": 2,
+				"switches":
+				[
+					{
+						"swidx":1,
+						"automode":true,
+						"validpower":true,
+						"overflow":true
+					},
+					{
+						"swidx":2,
+						"automode":true,
+						"validpower":false,
+						"overflow":false
+					}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 대기전력차단기 상태
+#  - 스마트폰에서 대기전력차단기 상태를 요청,
+#  - idx에 해당 되는 대기전력차단기 상태 응답
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+			{"idx":2, "option":"setwatt"}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"switches":
+				[
+					{"swidx":1, "automode":true, "autovalid":true, "overflow":false, "on":true, "curwatt":1234.5}
+				]
+			},
+			{
+				"idx":2,
+				"connection":true,
+				"switches":
+				[
+					{"swidx":1, "automode":true, "autovalid":true, "overflow":false, "on":true, "curwatt":1234.5},
+					{"swidx":2, "automode":true, "autovalid":true, "overflow":false, "on":true, "curwatt":1234.5}
+				]
+			},
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 대기전력차단기 설정
+# 스마트폰에서 대기전력차단기 값 변경
+# idx에 해당 되는 대기전력차단기 값을 변경
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{
+						"swidx":1,
+						"autofunc":true,
+						"channel":true,
+						"automode":true,
+						"on":false,
+						"setwatt":98.7
+					},
+					{
+						"swidx":2,
+						"autofunc":true,
+						"channel":true,
+						"automode":true,
+						"on":false,
+						"setwatt":98.7
+					},
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 대기전력차단기 - End
+#
+################################################################################
+
+
+
+
+
+################################################################################
+#
+# 전등(light) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : 전등 스위치 갯수
+#  - dimmode : Dimming지원 스위치bitmap
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx": 1, "name": "전등1", "swcnt": 2, "dimmode": 0x0000, "connected":true, "schedule":true},
+			{"idx": 2, "name": "전등2", "swcnt": 3, "dimmode": 0x0003, "connected":true, "schedule":true}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 전등 상태
+#  - 스마트폰에서 전등의 상태를 요청,
+#  - idx에 해당 되는 전등 상태 응답
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"switches":
+				[
+					# swidx : 전등박스에 있는 스위치 번호
+					# dimen : Dimming기능 지원
+					# dimval : Dimming값 0~15
+					{"swidx":1, "on":true, "dimen":false, "dimval":0, "schedule":true},
+					{"swidx":2, "on":false, "dimen":false, "dimval":0},
+					{"swidx":3, "on":false, "dimen":false, "dimval":0},
+					{"swidx":4, "on":false, "dimen":false, "dimval":0}
+				]
+			},
+			{
+				"idx":2,
+				"connection":true,
+				"switches",
+																																																					[
+																																																						{"swidx":1, "on":true, "dimen":false, "dimval":0, "schedule":false}
+																																																					]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 전등 설정
+# 스마트폰에서 전등 값 변경
+# idx에 해당 되는 전등 값을 변경
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true, "dimval":0, "schedule":true},
+					{"swidx":2, "on":true, "dimval":0, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 전등 - End
+#
+################################################################################
+
+
+################################################################################
+#
+# Interphone - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  -
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"interphone",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"interphone",
+		"command":"devinfo",
+		"indexes":
+		[
+			{ "idx":1, "name":"인터폰1" , "connected":true},
+			{ "idx":2, "name":"인터폰2", "connected":true }
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 인터폰 상태
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"interphone",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"interphone",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"dooropen":false          # Door 상태
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# Interphone 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"interphone",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"dooropen":true    # 도어 Open
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Interphone - End
+#
+################################################################################
+
+
+################################################################################
+#
+# 온수매트 - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - maxtemp, mintemp : 설정 온도 범위
+#  - heatercnt : heater 갯수
+#  - sleepmode : 취침 모드 지원
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"devinfo",
+		"indexes":
+		[
+			{ "idx": 1, "name": "온수매트1", "maxtemp": 70, "mintemp": 20, "heatercnt":1, "sleepmode":true, "connected":true },
+			{ "idx": 2, "name": "온수매트2", "maxtemp": 70, "mintemp": 20, "heatercnt":1, "sleepmode":false, "connected":true },
+			{ "idx": 3, "name": "온수매트3", "maxtemp": 70, "mintemp": 20, "heatercnt":2, "connected":true}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 온수매트 상태
+#  - error code 정의
+#    0 : 정상
+#    1 : 물없음    (TTA Error Code : 0xA)
+#    2 : 히터과열  (TTA Error Code : 0x6)
+#    3 : 순환장애  (TTA Error Code : 0x7)
+#    15 : AS문의   (TTA Error Code : others)
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1},
+			{"idx":2}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"heaters":[
+					{"htidx":1, "error" :0, "power":true, "heating":true, "schedule":false, "sleepmode":0|1|2|3, "settemp":25, "curtemp":22}
+				]
+			},
+			{
+				"idx":2,
+				"connection":true,
+				"heaters":
+				[
+					{"htidx":1, "power":true, "heating":true, "schedule":false, "sleepmode":0|1|2|3, "settemp":25, "curtemp":22}
+				]
+			},
+			{
+				"idx":3,
+				"connection":true,
+				"heaters":
+				[
+					{"htidx":1, "error" :1, "power":true, "heating":true, "schedule":false, "sleepmode":0|1|2|3, "settemp":27, "curtemp":22},
+					{"htidx":2, "error" :2, "power":true, "heating":false, "schedule":false, "settemp":24, "curtemp":25}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 온수매트 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"heaters":
+				[
+					{"htidx":1, "sleepmode":2 }
+				]
+			},
+			{
+				"idx":2,
+				"heaters":
+				[
+					{"htidx":1, "power":false, "settemp":30 }
+				]
+			},
+			{
+				"idx":3,
+				"heaters":
+				[
+					{"htidx":2, "power":true, "settemp":30 },
+					{"htidx":1, "power":false, "settemp":30 }
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 사용량 요청
+#  - start ~ end시간 사이의 값을 전달
+#  - 시간은 epoch를 이용하여 표시
+#  - 시간 표시의 최소 단위는 hour --> 분,초는 모두 0으로
+# ------------------------------------------------------------------------------
+
+# 사용량 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"getmeter",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"start":"/Date(694224000000)/",   # 사용량 요청 기간 시작(epoch timestamp)
+				"end":"/Date(694224000000)/"      # 사용량 요청 기간 끝
+			},
+			{"idx":2}
+		]
+	}
+}
+
+# 사용량 응답
+R9HAUTO_JSON
+{
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"thermomat",
+		"command":"getmeter",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"amoutused":33600,   # 총사용 시간(sec) 33600초/60=560분=9시간20분
+				"meancurtemp":24,    # 기간 동안 평균 온도
+				"peakcurtemp":28,    # 기간내 최고 온도
+				"meansettemp":26,    # 기간 동안 평균 설정 온도
+				"peaksettemp":30     # 기간내 최고 설정 온도
+			},
+			{
+				"idx":2,
+				"amoutused":630,     # 총사용 시간(unit :sec) :10분30초 사용
+				"meancurtemp":15,    # 기간 동안 평균 온도
+				"peakcurtemp":18,    # 기간내 최고 온도
+				"meansettemp":16,    # 기간 동안 평균 설정 온도
+				"peaksettemp":19     # 기간내 최고 설정 온도
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 온수매트 - End
+#
+################################################################################
+
+
+
+################################################################################
+#
+# 콘센트 - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : 콘센트 구 갯수
+#  -
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"outlet",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"outlet",
+		"command":"devinfo",
+		"indexes":[
+			{ "idx": 1, "name": "콘센트1", "swcnt":2, "connected":true, "schedule":true, "tempsensor":true },
+			{ "idx": 2, "name": "콘센트2", "swcnt":2, "connected":true }
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 콘센트 상태
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"outlet",
+		"command":"getstate",
+		"indexes":[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"outlet",
+		"command":"getstate",
+		"indexes":[
+			{
+				"idx":1,
+				"connection":true,
+				"switches":[
+					{"swidx":2, "on":false, "schedule":true,  "watthour":234, "watt":123}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 콘센트 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"outlet",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true, "reset":true},
+					{"swidx":2, "on":true}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 콘센트 - End
+#
+################################################################################
+
+
+################################################################################
+#
+# AirConditioner - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - floaten : 소수점 표현 유/무
+#  - reservation: 기본 예약기능 유/무
+#  - heater: 난방기능 유/무
+#  - cooling: 냉방기능 유/무
+#  - naturalwind: 자연풍기능 유/무
+#  - windmode: 풍량방식 (약,중,강)
+#  - maxtemp: 설정온도 상한값
+#  - mintemp: 설정온도 하한값
+#  - swcnt: 연결된 실내기 수
+#  - schedule : 라온익스 예약기능 유/무
+#  - pushmsg : 푸쉬기능 유/무
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airconditioner",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airconditioner",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx":1,
+				"id":"0123456789",
+				"name":"에어콘1",
+				"connected":true,
+				"roomconcnt":1,
+				"reservation":true,
+				"heater":true,
+				"cooler":true,
+				"naturalwind":true,
+				"windmode":1,
+				"schedule":true,
+				"floaten":true,
+				"maxtemp":45,
+				"mintemp":15}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# AirConditioner 상태
+#  - schedule : 예약기능 상태
+#  - lock : 잠금기능 상태
+#  - on : 운전(켜짐)/정지(꺼짐)
+#  - mode : 운전모드(자동/냉방/제습/송풍/난방/예약)
+#  - direction : 풍향조절 (정지/상하/좌우/상하좌우)
+#  - power : 풍량상태 (자동/미풍(약풍)/약풍(중풍)/강풍/자연풍)
+#  - settemp : 설정온도 (0.5도 여부 및 0~127도)
+#  - curtemp : 현재온도 (0.5도 여부 및 0~127도)
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "airconditioner",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airconditioner",
+		"command":"getstate",
+		"indexes":[
+			{
+				"idx":1,
+				"connection":true,
+				"roomcons":
+				[
+					{"rcidx":1,
+						"schedule":true,
+						"lock":false,
+						"on":true,
+						"mode":5,
+						"direction":3,
+						"wind":2,
+						"settemp":21.5,
+						"curtemp":25.5
+					}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# AirConditioner 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airconditioner",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"roomcons":
+				[
+					{"rcidx":1,
+						"on":true,
+						"schedule":true,
+						"lock":false,
+						"mode":3,
+						"direction":2,
+						"wind":4,
+						"settemp":19.5
+					}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# AirConditioner - End
+#
+################################################################################
+
+
+
+
+################################################################################
+#
+# Hood (주방환기) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - maxpower : 풍량제어 단계 범위 값 (예:4단계- 0x04)
+#  - co2sensor : CO2 센서 사용 유무 ( 없음 0x00, 사용 0x01 )
+#  - savemode : 절약모드 지원
+#  - automode : 자동모드 지원
+#  - heatermode : 전열모드 지원
+#  - sleepmode : 취침 모드 지원
+#  - normalmode : 일반모드(Bypass mode) 지원
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"hood",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"hood",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"id":"1234567890",
+				"name":"환기1",
+				"connected":true,
+				"schedule":true,
+				"maxpower":3,
+				"light":true,
+				"co2sensor":true,
+				"savemode":true,
+				"automode":true,
+				"heatermode":true,
+				"sleepmode":true,
+				"normalmode":true
+			}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+#  Hood 상태
+#  - connection : 연결 상태
+#  - schedule : 예약 기능 상태
+#  - on : 전원 on/off
+#  - power : 풍량 제어 상태(정지 : 0, ~)
+#  - mode : 모드 상태(일반, 취침, 전열, 자동, 절약)
+#  - heater : 히터 동작 알림 (on/off)
+#  - co2max : CO2 농도 과다 알림 (정상/과다)
+#  - smoke : 제연운전알림 (정상/제연)
+#  - replacefilter : 필터 교체시기 알림 ( 정상/필터교체요구)
+#  - replaceheater : 전열 교환기 교체시기 알림 (정상/필터교체요구)
+#  - fanexplosion : 팬 파열 (정상/파열)
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "hood",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"hood",
+		"command":"getstate",
+		"indexes":[
+			{
+				"idx":1,
+				"connection":true,
+				"schedule":true,
+				"on": true,
+				"power": 2,
+				"light": true,
+				"mode": 3,
+				"heater": false,
+				"co2max":true,
+				"smoke":true,
+				"replacefilter":true,
+				"replaceheater":true,
+				"fanexplosion":true
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+#  Hood 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"hood",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"schedule":true,
+				"on":false,
+				"light":false,
+				"power":2,
+				"mode":5
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Hood - End
+#
+################################################################################
+
+
+
+################################################################################
+#
+# Security - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : switch 갯수
+#  - temperature : 온도센서 지원
+#  - incnt : input 갯수
+#  - schedule : 예약 기능 지원
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx":1,
+				"id":"3401020304",
+				"name":"방범방재1",
+				"swcnt":2,
+				"temperature":true,
+				"incnt":2,
+				"schedule":false,
+				"connected":false},
+				{"idx":2,
+					"id":"3401020305",
+					"name":"방범방재2",
+					"swcnt":2,
+					"temperature":true,
+					"incnt":2,
+					"schedule":false,
+					"connected":true}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# Security 상태
+#  - connection : 연결 상태
+#  - curtemp : 현재온도, 온도센서 지원되는 모델
+#  - swidx : 스위치 index
+#  - on : 스위치 on/off
+#  - schedule : 예약 기능 상태
+#  - inidx : input 센서 index
+#  - on : input센서 on/off 상태
+# Security MODE
+#  - schedulepush : 예약 PUSH enable
+#  - systempush : 시스템 PUSH enable
+#  - userpush : 사용자 PUSH enable
+#  - dinkeeptime : digital input keep time mode(ON/OFF)
+#  - dintact : digital input Tact switch mode(ON/OFF)
+#  - dinacitve : digital input active level(high:1/low:0)
+#  - doutactive : digital output active level(high:1/low:0)
+#  - doutstyle : digital output style(puls/normal)
+------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "secutiry",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"getstate",
+		"indexes":[
+			{
+				"idx":1,
+				"connection":true,
+				"curtemp":32
+				"switches":[
+					{"swidx":1, "on":true, "schedule":true},
+					{"swidx":2, "on":true}
+				],
+				"inputs":[
+					{"inidx":1, "on":true},
+					{"inidx":2, "on":false}
+				],
+				"schedulepush":true,
+				"systempush":true,
+				"userpush":true,
+				"dinkeeptime":true,
+				"dintact":true,
+				"dinactive":1,
+				"doutactive":1,
+				"doutstyle":true
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 방범 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true, "schedule":true},
+					{"swidx":2, "on":true}
+				]
+			}
+		]
+	}
+}
+
+# 모드 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"setmode",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"schedulepush":true,
+				"systempush":true,
+				"userpush":true,
+				"dinkeeptime":true,
+				"dintact":true,
+				"dinactive":1,
+				"doutactive":1,
+				"doutstyle":true
+			}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# 방범 푸쉬 메세지 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 푸쉬메세지 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"setpushmsg",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "msg":"푸쉬 메세지 설정 확인!!빠밤"}
+				]
+			}
+		]
+	}
+}
+# 푸쉬 메세지 조회
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "security",
+		"command": "getpushmsg",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"security",
+		"command":"getpushmsg",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "msg":"푸쉬"}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Security - End
+#
+################################################################################
+
+
+
+
+################################################################################
+#
+# 라온익스 일괄(R9Batch) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : 스위치 갯수 : 2
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"r9batch",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"r9batch",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx": 1, "id":"8799887766", "name": "일괄1", "swcnt": 2, "connected":true, "schedule":false}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 일괄 상태
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"r9batch",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"r9batch",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"switches":
+				[
+					{"swidx":1, "on":true, "schedule":true}
+				]
+			},
+			{
+				"idx":2,
+				"connection":true,
+				"switches",
+				[
+					{"swidx":1, "on":true, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 일괄 설정
+# 스위치 번호에 따라 다르게 동작 함
+# swidx : 1
+#   - 일괄소등 제어
+# swidx : 2
+#   - 방범방제 센서 제어
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"r9batch",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true, "schedule":true},
+					{"swidx":2, "on":true, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 라온익스 일괄 - End
+#
+################################################################################
+
+
+################################################################################
+#
+# Boiler (working) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+# - roomconcnt : 방 수
+# - heatertype : 제어 방식(공기온도방식 = 0x01, 환수온도 = 0x02)
+# - maxtemp : 설정치 상한값(Hex)
+# - mintemp : 설정치 하한값(Hex)
+# - floaten : 온도 소수점 표현
+# - schedule : 예약기능 유/무
+# - hotwater : 온수기능 유/무
+# - outdoor : 외출 기능 유/무
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"boiler",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"boiler",
+		"command":"devinfo",
+		"indexes":
+		[
+			{"idx":1,
+				"id":"0123456789",
+				"name":"보일러1",
+				"connected":true,
+				"heatertype":1,
+				"maxtemp":45,
+				"mintemp":15,
+				"floaten":true,
+				"hotwater":true,
+				"outdoor":true,
+				"schedule":true
+			}
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# Boiler 상태
+#  - power : on /off
+#  - schedule : 예약기능 상태
+#  - outdoor : 외출 모드 설정
+#  - hotwater : 온수 모드 설정
+#  - settemp : 설정온도 (0.5도 여부 및 0~127도)
+#  - curtemp : 현재온도 (0.5도 여부 및 0~127도)
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "boiler",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"boiler",
+		"command":"getstate",
+		"indexes":[
+			{
+				"idx":1,
+				"connection":true,
+				"hotwater":true,
+				"schedule":true,
+				"power":true,
+				"outdoor":true,
+				"settemp":21.5,
+				"curtemp":25.5
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# Boiler 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"boiler",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"power":true,
+				"schedule":true,
+				"outdoor":true,
+				"hotwater":true,
+				"settemp":23.5
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Boiler - End
+#
+################################################################################
+
+
+################################################################################
+#
+# Gateway - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 제어 디바이스 삭제
+#  -
+# ------------------------------------------------------------------------------
+
+# 삭제 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"deldev",
+		"indexes":
+		[
+			{"idx":1, "type", "thermostat"},
+			{"idx":2, "type", "gasvalve"}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 제어 디바이스 정보
+#  -
+# ------------------------------------------------------------------------------
+
+# 제어 디바이스 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getdevinfo"
+	}
+}
+
+# 제어 디바이스 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getdevinfo",
+		"indexes":
+		[
+			{
+				"type":"thermostat",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":false}
+				]
+			},
+			{
+				"type":"thermomat",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":true}
+				]
+			},
+			{
+				"type":"light",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 제어 디바이스 리스트
+#  -
+# ------------------------------------------------------------------------------
+
+# 제어 디바이스 리스트 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getdevlist"
+	}
+}
+
+# 제어 디바이스 리스트 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getdevlist",
+		"indexes":
+		[
+			{
+				"devtype":"thermomat",
+				"devices":
+				[
+					{ "idx":1, "name":"온수매트1", "connected":true},
+					{ "idx":5, "name":"온수매트2", "connected":false}
+				]
+			},
+			{
+				"devtype":"thermostat",
+				"devices":
+				[
+					{ "idx":1, "name":"온도조절기1", "connected":true},
+					{ "idx":2, "name":"온도조절기2", "connected":false},
+					{ "idx":5, "name":"온도조절기5", "connected":true}
+				]
+			},
+			{
+				"devtype":"light",
+				"devices":
+				[
+					{"idx":1, "name":"전등1", "connected":true},
+					{"idx":2, "name":"전등2", "connected":true},
+					{"idx":3, "name":"전등3", "connected":false},
+					{"idx":4, "name":"전등4", "connected":false}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+#  페어링 모드 진입 (app -> gateway)
+#  - wiretype: rf/rs485
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command”:”pairingstart”,
+		“indexes”:
+		[
+			{
+				“wiretype”:”rf"
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+#  페어링 진행중 (gateway -> app)
+#  - time: 1~60 (진행 시간), 넣을까 말까 ? 고민중...
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command”:”pairingworking”,
+		“indexes”:
+		[
+			{
+				“time”:5
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+#  페어링 완료 (gateway -> app)
+#  - state: sucess/fail
+#  - target: 범용스위치/조명스위치/온도조절기 등등 페어링 완료된 이름
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command”:”pairingend”,
+		“indexes”:
+		[
+			{
+				“state”:”sucess”,
+				“target”:”범용스위치"
+			}
+		]
+	}
+}
+
+
+################################################################################
+#
+# Gateway - End
+#
+################################################################################
+
+
+################################################################################
+#
+# Server Management - Start
+#
+################################################################################
+
+# 1. DB의 key는 장치ID ex> 0000004b@iunplug.co.kr
+# 2. 메시지 수식지 xmpp의 보낸 ID을 DB의 key로 사용.
+# 3. 메시지는 Async 형태
+# 4. 메시지 sequence
+
+# 요청
+# ------------- request ----------->
+# <-------------- ack  -------------
+# 요청에 대한 응답이 있을 경우
+# <------------- reply -------------
+# ---------------- ack ------------>
+
+# 전체 메시지 - ack가 없음
+# ------------- broadcast --------->
+
+# ACK 응답
+R9HAUTO_JSON
+{
+	"version":1,    # integer
+	"type":"ack",
+	"msgid":"string    # message id (string)
+	"code":<code>,     # == 0 OK |== error code (아직 정의 되지 않음)
+	"message":"error message"
+}
+
+# ------------------------------------------------------------------------------
+# System 정보
+#  -
+# ------------------------------------------------------------------------------
+
+# System 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"getsysinfo"
+	}
+}
+
+# System 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"getsysinfo",
+		"info”:
+		{
+			"type":"gateway",
+			"vendor":"raonix",
+			"model" :"dj200"
+			"swver":"2.1.0",
+			"hwver":"1.0.0",
+			"buildcode":"1"
+		}
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 장치 Upgrade
+#  -
+# ------------------------------------------------------------------------------
+
+# 개별 장치 Upgrade 요청
+mysq
+
+# 그룹 전체 Upgrade 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"broadcast",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"upgrade",
+		"indexes" : [
+			{
+				"now" : false
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# push 메시지 전송
+#  - to : 수신할 사용자 ID
+#  - content : 푸쉬메세지 json
+#    - from : 푸쉬를 보낸 이의 xmpp_jid,  / 뒤 리소스 정보는 제외
+#    - from_type : gateway, server, ......
+#    - devid : 푸쉬를 보낸 이의 devID
+#    - msg_type : (int) 일반, 긴급, 알림, 공지 등등...
+#               0:
+#               1:
+#               2:
+#               9: 공지사항 (앱에서 푸쉬 클릭시 공지사항으로 바로 이동)
+#    - msg : 푸쉬메세지 내용 string
+# ------------------------------------------------------------------------------
+
+# push 메시지 전송 요청
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload": {
+		"devtype": "system",
+		"command": "pushmsg",
+		"indexes": [
+			{
+				"to": "mother@gmail.com",
+				"content": "{ \"from\": \”01020304@raonix.co.kr\",\"from_type\": \”gateway\",\"devid\": \"111111\", \"msg_type\": 2, \"msg\": \"가스밸브가열렸습니다.\" }"
+
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# System 정보 업데이트
+#  - 자신의 정보를 서버에 보내 정보를 갱신함
+# ------------------------------------------------------------------------------
+
+# System 정보 업데이트 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"updatesysinfo",
+		"info":
+		{
+			"type":"gateway",
+			"vendor":"raonix",
+			"model" :"dj200"
+			"swver":"2.1.0",
+			"hwver":"1.0.0"
+		}
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 제어 디바이스 정보 업데이트 (Gateway에만 해당)
+#  - 게이트웨이에 붙어있는 제어디바이스의 정보를 서버로 보냄.
+#  - id : 제어 디바이스 고유ID
+#  - connected : 현재 접속 상태
+# ------------------------------------------------------------------------------
+
+# 제어 디바이스 정보 업데이트 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"updatedevinfo",
+		"indexes":
+		[
+			{
+				"type":"thermostat",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":false}
+				]
+			},
+			{
+				"type":"thermomat",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true},
+					{"id":"360102000001", "connected":true}
+				]
+			},
+			{
+				"type":"light",
+				"devids":
+				[
+					{"id":"360102000001", "connected":true}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Server Management - End
+#
+################################################################################
+
+
+
+################################################################################
+#
+# Schedule List - Start
+#
+################################################################################
+#
+#  - scidx : schedule index
+#  - hour, min : 시, 분
+#  - on : on / off
+#  - intval : 임의의 정수 디바이스 마다 다른 의미로 사용
+#  - wday : 주단위의 적용하는 요일을 bitmap으로 표시 0bit : 월, 6bit : 일
+#
+################################################################################mac
+
+# ------------------------------------------------------------------------------
+# 스케줄 정보
+#  - maxlist : 총 스케줄 이벤트 갯수
+#
+# ------------------------------------------------------------------------------
+
+# 스케줄 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxxx",
+		"command":"getscheinfo",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 스케줄 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxx",
+		"command":"getscheinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "schedule":true, "maxlist":48},
+					{"swidx":2, "schedule":false}
+				]
+			},
+			{
+				"idx":2,
+				"switches":
+				[
+					{"swidx":1, "schedule":false},
+					{"swidx":2, "schedule":true, "maxlist":24}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 스케줄 리스트 정보
+#  - 현재 설정된 스케줄 리스트 정보 요청
+#  - 해당 디바이스에 따라 요청 패킷 정의
+#  - scidx : schedule index
+#  - hour, min : 시, 분
+#  - on : on / off
+#  - intval : 임의의 정수 디바이스 마다 다른 의미로 사용
+#  - wday : 주단위의 적용하는 요일을 bitmap으로 표시 0bit : 월, 6bit : 일
+# ------------------------------------------------------------------------------
+
+# 스케쥴 리스트 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxx",
+		"command":"getschedule",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[ {"swidx":1}, {"swidx":2} ]
+			}
+		]
+	}
+}
+
+# 스케쥴 리스트 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxx",
+		"command":"getschedule",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{
+						"swidx":1,
+						"schedules": [
+							{
+								"gridx":1,
+								"wday":31,
+								"list":
+								[
+									{"scidx":1, "hour":8, "min":30, "on":true, "intval":21},
+									{"scidx":2, "hour":10, "min":0, "on":true, "intval":22},
+									{"scidx":3, "hour":18, "min":30, "on":false}
+								]
+							},
+							{
+								"gridx":2,
+								"wday":96,
+								"list":
+								[
+									{"scidx":1, "hour":8, "min":30, "on":true, "intval":21}
+								]
+							}
+						]
+					},
+					{
+						"swidx":2,
+						"schedules": [
+							{
+								"gridx":1,
+								"wday":3,
+								"list": [
+									{"scidx":1, "hour":8, "min":30, "on":true, "intval":21},
+									{"scidx":2, "hour":10, "min":0, "on":true, "intval":22},
+									{"scidx":3, "hour":18, "min":30, "on":false}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 스케쥴 리스트 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 스케쥴 리스트 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxxx",
+		"command":"setschedule",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{
+						"swidx":1,
+						"schedules":
+						[
+							{
+								"gridx":1,
+								"wday":127,
+								"list": [
+									{"scidx":1, "hour":8, "min":30, "on":true, "intval":21},
+									{"scidx":2, "hour":10, "min":0, "on":true, "intval":22},
+									{"scidx":3, "hour":10, "min":0, "on":true, "intval":23},
+									{"scidx":4, "hour":10, "min":0, "on":true, "intval":24},
+									{"scidx":5, "hour":10, "min":0, "on":true, "intval":25},
+									{"scidx":6, "hour":10, "min":0, "on":true, "intval":26},
+									{"scidx":8, "hour":10, "min":0, "on":true, "intval":27},
+									{"scidx":8, "hour":10, "min":0, "on":true, "intval":28},
+									{"scidx":9, "hour":10, "min":0, "on":true, "intval":29},
+									{"scidx":10, "hour":10, "min":0, "on":true, "intval":31},
+									{"scidx":11, "hour":10, "min":0, "on":true, "intval":32},
+									{"scidx":12, "hour":10, "min":0, "on":true, "intval":33},
+									{"scidx":13, "hour":18, "min":30, "on":false}
+								]
+							},
+							{
+								"gridx":2,
+								"wday":33,
+								"list": [
+									{"scidx":14, "hour":8, "min":30, "on":true, "intval":11},
+									{"scidx":15, "hour":10, "min":0, "on":true, "intval":22},
+									{"scidx":16, "hour":10, "min":0, "on":true, "intval":32},
+									{"scidx":17, "hour":10, "min":0, "on":true, "intval":42},
+									{"scidx":18, "hour":10, "min":0, "on":true, "intval":52}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 스케쥴 enable
+#  - 스케줄 기능을 enable/disable 시킴
+#  - 해당 디바이스에 setstate, getstate의 명령에 포함 시켜 사용
+#  - scheduel : 스케줄 리스트에 따라 에약 기능 수행
+# ------------------------------------------------------------------------------
+
+# 스케줄 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxx",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "schedule":true},
+					{"swidx":2, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+# 스케줄 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"xxxxxxx",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"connection":true,
+				"switches":
+				[
+					{"swidx":1, "schedule":true},
+					{"swidx":2, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# Schedule - End
+#
+################################################################################
+
+
+
+
+
+################################################################################
+#
+#     Haatz-RAONIX Air Care System Protocol - Start
+#
+################################################################################
+# ------------------------------------------------------------------------------
+# HaatzAirSensor
+#  - co2data : 0~65535 ppm
+#  - vocdata : 0~65535 ppm
+# ------------------------------------------------------------------------------
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airsensor",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airsensor",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"id":"9011111101",
+				"name":"공기질센서1",
+				"connected":true
+			},
+			{
+				"idx":2,
+				"id":"9011111102",
+				"name":"공기질센서2",
+				"connected":true
+			}
+		]
+	}
+}
+
+# HaatzAirSensor 상태요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airsensor",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# HaatzAirSensor 상태응답
+# AirSensor의 경우 상태응답에 연결된 모든 센서의 값을 한번에 올려준다.
+# idx는 단지 표시용이고, rcidx로 구분함.
+R9HAUTO_JSON
+{
+	"code": 0,
+	"version": 1,
+	"type": "reply",
+	"msgid": "msg268",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 2,
+				"roomcons": [
+					{
+						"rcidx": 1,
+						"connection": true,
+						"co2data": 1040,
+						"vocdata": 440
+					},
+					{
+						"rcidx": 2,
+						"connection": true,
+						"co2data": 1040,
+						"vocdata": 440
+					}
+				]
+			}
+		],
+		"devtype": "airsensor",
+		"command": "getstate"
+	}
+}
+# ------------------------------------------------------------------------------
+# HaatzHood
+#  - speed(char) : 팬 속도 표시(1,2,3단, P:P단, A:미세가스, C:제균/청정)
+#      >> ASCII data ("1" = 0x31, "P" = 0x50)
+#  - button(int) : 1~5(1:후드운전버튼, 2:조명, 3:모드선택, 4:미세가스환기, 5:제균/청정)
+#  - smartmode(bool) : true/false (true : smart mode, false : manual mode)
+#  - noticemsg(int) : 1~3(1: fan msg, 2: gas msg, 3: fire msg)
+# ------------------------------------------------------------------------------
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"rangehood",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"rangehood",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"id":"9111111101",
+				"name":"레인지후드1",
+				"connected":true
+			},
+			{
+				"idx":2,
+				"id":"9111111102",
+				"name":"레인지후드2",
+				"connected":true
+			}
+		]
+	}
+}
+
+# HaatzHood 상태요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"rangehood",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"roomnum":2
+			}
+		]
+	}
+}
+
+# HaatzHood 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"rangehood",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"button":1
+			}
+		]
+	}
+}
+
+# HaatzHood 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "rangehood",
+		"command": "xxxxxxxx",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"connection": true,
+				"speed": "A",
+				"on": true,
+				"button_run": true,
+				"button_light": true,
+				"button_mode": false,
+				"button_gas": true,
+				"button_clean": true,
+				"smartmode": true,
+				"noticemsg": 1,
+				"co2data":1023,
+				"vocdata":200
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# HaatzVent
+#  - speed(int) : 팬 속도 표시(0,1,2,3단)
+#  - on(bool) : true
+#        >> 항상 표시해야함.
+#  - mode(int) : 0~6 (0:취침, 1:예약, 2:외출, 3:배기, 4:급기, 5:급배기, 6:자동)
+#      >> ASCII data ("1" = 0x31, "2" = 0x32)
+#  - hour(int) : 예약 시간(0~23)
+#  - min(int) : 예약 분(0~59)
+#  - sensorcondition(int) : 0~3(0:normal, 1:good, 2: bod, 3:poor)
+# ------------------------------------------------------------------------------
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"vent",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"vent",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"id":"9211111101",
+				"name":"열교환기1",
+				"connected":true
+			},
+			{
+				"idx":2,
+				"id":"9211111102",
+				"name":"열교환기2",
+				"connected":true
+			}
+		]
+	}
+}
+
+# HaatzVent 상태요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"vent",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"roomnum":2
+			}
+		]
+	}
+}
+
+# HaatzVent 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"vent",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"on":true,
+				"mode":6,
+				"speed":1,
+				"hour":23,
+				"min":59,
+				"sensorcondition":1
+			}
+		]
+	}
+}
+
+# HaatzVent 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "vent",
+		"command": "xxxxxxxx",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"connection": true,
+				"speed": 2,
+				"mode": 5,
+				"co2data":1023,
+				"vocdata":200
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# HaatzPurifier
+#  - speed(int) : 팬 속도 표시(0,1,2,3단)
+#  - automode(bool) : 자동모드, 수동모드(true:auto, false:manual)
+# ------------------------------------------------------------------------------
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"purifier",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"purifier",
+		"command":"devinfo",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"id":"9311111101",
+				"name":"공기청정기1",
+				"connected":true
+			},
+			{
+				"idx":2,
+				"id":"9311111102",
+				"name":"공기청정기2",
+				"connected":true
+			}
+		]
+	}
+}
+
+# HaatzPurifier 상태요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"purifier",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"roomnum":2
+			}
+		]
+	}
+}
+
+# HaatzPurifier 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"purifier",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"automode":true,
+				"speed":1
+			}
+		]
+	}
+}
+
+# HaatzPurifier 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "purifier",
+		"command": "xxxxxxxx",
+		"indexes":
+		[
+			{
+				"idx": 1,
+				"connection": true,
+				"automode": true,
+				"speed": 2,
+				"co2data":1023,
+				"vocdata":200
+			}
+		]
+	}
+}
+
+################################################################################
+#
+#     Haatz-RAONIX Air Care System Protocol - End
+#
+################################################################################
+
+
+
+
+################################################################################
+#
+# 대기전력(stpower) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - swcnt : 대기전력 스위치 갯수
+#  - dimmode : Dimming지원 스위치bitmap
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg0",
+	"payload": {
+		"indexes": [
+			{
+				"id": "5239000000",
+				"idx": 1,
+				"swcnt": 2,
+				"connected": true,
+				"name": "대기전력차단1",
+				"switches": [
+					{
+						"overflow": true,
+						"swidx": 1,
+						"automode": true,
+						"validpower": true
+					},
+					{
+						"overflow": true,
+						"swidx": 2,
+						"automode": true,
+						"validpower": true
+					}
+				]
+			}
+		],
+		"devtype": "stpower",
+		"command": "devinfo"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 대기전력 상태
+#  - 스마트폰에서 대기전력 상태를 요청,
+#  - idx에 해당 되는 대기전력 상태 응답
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg1",
+	"payload": {
+		"indexes": [
+			{
+				"switches": [
+					{
+						"automode": false,
+						"swidx": 1,
+						"on": true,
+						"overflow": false,
+						"autovalid": false,
+						"curwatt": 0.0,
+						"setwatt": 12.300000190734863
+					},
+					{
+						"automode": true,
+						"swidx": 2,
+						"on": true,
+						"overflow": false,
+						"autovalid": false,
+						"curwatt": 0.0,
+						"setwatt": 0.0
+					}
+				],
+				"idx": 1,
+				"connection": true
+			}
+		],
+		"devtype": "stpower",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 대기전력 설정
+# 스마트폰에서 대기전력 값 변경
+# idx에 해당 되는 대기전력 값을 변경
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "setwatt":12.3}
+				]
+			}
+		]
+	}
+}
+
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"stpower",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "on":true}
+				]
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 대기전력 - End
+#
+################################################################################
+
+
+################################################################################
+#
+# TTA표준 일괄스위치 Batch - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"batch",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg0",
+	"payload": {
+		"indexes": [
+			{
+				"id": "5239000000",
+				"idx": 1,
+				"connected": true,
+				"name": "일괄스위치1",
+				"ele_floor": false,
+				"ele_call": false,
+				"stpower": false,
+				"outdoor": false,
+				"gasclose": false
+			}
+		],
+		"devtype": "batch",
+		"command": "devinfo"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 일괄스위치 상태
+#  - 스마트폰에서 일괄스위치 상태를 요청,
+#  - idx에 해당 되는 일괄스위치 상태 응답
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"batch",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg1",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 1,
+				"connection": true,
+				"ele_up": true,
+				"ele_down": true,
+				"stpower": true,
+				"light": true,
+				"outdoor": true,
+				"gasclose": true
+			}
+		],
+		"devtype": "batch",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 일괄스위치 설정
+# 스마트폰에서 일괄스위치 값 변경
+# idx에 해당 되는 일괄스위치 값을 변경
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"batch",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"light":true,
+				"stpower":false
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# TTA 일괄스위치 - End
+#
+################################################################################
+
+################################################################################
+#
+# 스마트 홈박스 (HomeBox)  - Start
+#
+################################################################################
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype”:”homebox",
+		"command”:”getstate",
+		“indexes”:
+		[
+			{
+				“idx”:1
+			}
+		]
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype”:"homebox",
+		"command”:"getstate",
+		"indexes":
+		{
+			“generalio”:
+			[
+				{
+					"switches": [
+						{ "on": true, "swidx": 1, "schedule": false },
+						{ "on": false, "swidx": 2, "schedule": false }
+					],
+					"dinactive": 0,
+					"schedulepush": false,
+					"idx": 2,
+					"inputs": [
+						{ "inidx": 1, "on": true },
+						{ "inidx": 2, "on": true }
+					],
+					"dinkeeptime": false,
+					"connection": true,
+					"userpush": false,
+					"curtemp": 18,
+					"systempush": true,
+					"dintact": false,
+					"doutactive": 1,
+					"doutstyle": false
+				}
+			],
+			“gasvalve”:
+			[
+				{"idx": 1, "connection": true, "open": true, "operatingtime":1234}
+			],
+			“security”:
+			[
+				{
+					"idx":1,
+					"connection":true,
+					"curtemp":32
+					"switches":[
+						{"swidx":1, "on":true, "schedule":true},
+						{"swidx":2, "on":true}
+					],
+					"inputs":[
+						{"inidx":1, "on":true},
+						{"inidx":2, "on":false}
+					],
+					"schedulepush":true,
+					"systempush":true,
+					"userpush":true,
+					"dinkeeptime":true,
+					"dintact":true,
+					"dinactive":1,
+					"doutactive":1,
+					"doutstyle":true
+				}
+			],
+			“doorlock”:
+			[
+				##### IO 와 동일 스펙 #####
+			]
+		}
+	}
+}
+################################################################################
+#
+# 스마트 홈박스 (HomeBox) - End
+#
+################################################################################
+
+
+################################################################################
+#
+# 전동커튼 (Curtain) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+# - unknown : 커튼의 현 상태값을 알지 못함
+# - error : 에러상태, 0=정상
+# - angle : 각도조절기능 사용 여부
+# - level : 열림조절기능 사용 여부
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype”:"curtain",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg6045",
+	"payload": {
+		"indexes": [
+			{
+				"id": "ffffffffff",
+				"idx": 1,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼1",
+				"angle": false,
+				"level": true
+			},
+			{
+				"id": "ffffffffff",
+				"idx": 2,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼2",
+				"angle": false,
+				"level": true
+			},
+			{
+				"id": "ffffffffff",
+				"idx": 3,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼3",
+				"angle": false,
+				"level": true
+			},
+			{
+				"id": "ffffffffff",
+				"idx": 4,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼4",
+				"angle": false,
+				"level": true
+			},
+			{
+				"id": "ffffffffff",
+				"idx": 5,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼5",
+				"angle": false,
+				"level": true
+			},
+			{
+				"id": "ffffffffff",
+				"idx": 6,
+				"unknown": true,
+				"error": 0,
+				"connected": true,
+				"name": "전동커튼6",
+				"angle": false,
+				"level": true
+			}
+		],
+		"devtype": "curtain",
+		"command": "devinfo"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# curtain 상태
+#  - closing : 닫는중
+#  - openning : 여는중
+#  - opened : 열림
+#  - closed : 닫힘
+#  - angle : 닫힘일때만, 블라인드 각도조절
+#  - level : 열림 정도 조절, 0~10 (0=닫힘, 10=열림)
+#  - 대부분의 경우 level값만 보고 결정하면 됨.
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON{
+	"type": "request",
+	"version": 1,
+	"msgid": "858SEFG9G2",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 4
+			}
+		],
+		"devtype": "curtain",
+		"command": "getstate"
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg6047",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 4,
+				"connection": true,
+				"closing": false,
+				"openning": false,
+				"opened": true,
+				"error": 0,
+				"closed": false,
+				"angle": 0,
+				"level": 0
+			}
+		],
+		"devtype": "curtain",
+		"command": "getstate"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# curtain 설정
+#  - open : 0=닫힘, 1=열림, 2=정지
+#  - level : open=1 일때만 해당, 나머지 0
+#  - angle : open=0 일때만 해당, 나머지 0
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON{
+	"type": "request",
+	"version": 1,
+	"msgid": "14U0596UFT",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 4,
+				"level": 7,
+				"angle": 0,
+				"open": 1
+			}
+		],
+		"devtype": "curtain",
+		"command": "setstate"
+	}
+}
+
+################################################################################
+#
+# 전동커튼 (Curtain) - End
+#
+################################################################################
+
+################################################################################
+#
+# 기기 상태변경 업데이트 (gateway to server) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 상태변경 정보 업데이트
+# ------------------------------------------------------------------------------
+
+# thermostat, 온도조절기
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "thermostat",
+		"command": "updatedevstate",
+		"indexes": [
+			{
+				"idx": 1,
+				"from": "01ffff01@raonix.co.kr",
+				"createtime": 1460689262,
+				"devid": “3601020304",
+				"connection": true,
+				"roomcons":
+				[
+					{
+						"rcidx":1, "power": true,
+						"settemp": 30, "curtemp":25,
+						"schedule":true,
+						"outdoor":false,
+						"hotwater":false,
+						"heating":false,
+						"intervaltimer":true,
+						"intervaltimeval":45
+					}
+				]
+			}
+		]
+	}
+}
+
+# Airconditioner, LG 인버터 에어콘
+R9HAUTO_JSON
+{
+	"version":1,
+	"type”:"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"airconditioner",
+		"command”:”updatedevstate",
+		“indexes": [
+		{
+			"idx": 1,
+			“from”:”01ffff01@raonix.co.kr",
+			“createtime”: 1460689262,
+			“devid": “0211223344",
+			"connection": true,
+			"roomcons":
+			[
+				{
+					"rcidx":1,
+					“connected”:true,
+					"schedule":true,
+					"lock":false,
+					"on":true,
+					"mode":5,
+					"direction":3,
+					"wind":2,
+					"settemp":21.5,
+					“curtemp":25.5
+				}
+			]
+		}
+	}
+}
+
+# GeneralIO - conotec
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload": {
+		"devtype": "generalio",
+		"command": "updatedevstate",
+		"indexes": [
+			{
+				"idx": 2,
+				"from": "01ffff02@raonix.co.kr",
+				"createtime": 1460689333,
+				"devid": "8212345678",
+				"connected": true,
+				"switches": [{
+					"on": false,
+					"swidx": 1,
+					"schedule": true
+				},
+				{
+					"on": false,
+					"swidx": 2,
+					"schedule": false
+				}
+				],
+				"inputs": [{
+					"inidx": 1,
+					"on": false
+				},
+				{
+					"inidx": 2,
+					"on": false
+				}
+				],
+				"curtemp": 25,
+				"tempsensor": {
+					"sensorcurtemp": 22.5,
+					"version": "CONOTEC_FOX_2001CC",
+					"errsensoropen": false,
+					"errmintemp": false,
+					"pushmintemp": 15,
+					"temppush": true,
+					"errmaxtemp": false,
+					"pushmaxtemp": 33,
+					"temppushretry": true,
+					"tempout": true,
+					"errconnect": false,
+					"errsensorshort": false
+				}
+			}
+		]
+	}
+}
+
+################################################################################
+#
+# 기기정보 업데이트 (gateway to server) - End
+#
+################################################################################
