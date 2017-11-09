@@ -1,3 +1,17 @@
+
+# ------------------------------------------------------------------------------
+#  Common
+#  -
+# ------------------------------------------------------------------------------
+{
+  "jsonrpc": "2.0",
+  "method": "dev.info",
+  "id": null,
+  "params": {
+    "devtype": "forest"
+  }
+}
+
 # ------------------------------------------------------------------------------
 #  상태
 #  -
@@ -79,18 +93,23 @@
   "method": "forest.setstate",
   "params": {
     "devtype": "forest",
-    "indextes": [
-      "idx": 1,
-      "roomcons": [
-	{
-	  "rcidx": 1,
-	  "power": true,
-	  "settemp": 33
-	}
-      ],
-      "batchlight":true,
-      "induction":true,
-      "securityon":true
+    "indextes": [ 
+      {
+        "idx": 1,
+        "roomcons": [
+          {
+            "rcidx": 1,
+            "power": true,
+            "settemp": 33
+          }
+        ],
+        "batchlight":true,
+        "induction":true,
+        "securityon":true
+      }
     ]
   }
 }
+
+
+
