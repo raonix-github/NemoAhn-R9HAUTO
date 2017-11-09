@@ -16,6 +16,7 @@
 #  상태
 #  -
 # ------------------------------------------------------------------------------
+
 # request
 {
   "jsonrpc": "2.0",
@@ -88,26 +89,50 @@
 # ------------------------------------------------------------------------------
 # request
 {
+	"jsonrpc": "2.0",
+	"id": null,
+	"method": "dev.set",
+	"params": {
+		"devtype": "forest",
+		"indextes": [
+			"idx": 1,
+			"roomcons": [
+				{
+					"rcidx": 1,
+					"power": true,
+					"settemp": 33
+				}
+			],
+			"batchlight":true,
+			"induction":true,
+			"securityon":true
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# System  
+#  -
+# ------------------------------------------------------------------------------
+# get system-time
+{
   "jsonrpc": "2.0",
-  "id": null
-  "method": "forest.setstate",
-  "params": {
-    "devtype": "forest",
-    "indextes": [ 
-      {
-        "idx": 1,
-        "roomcons": [
-          {
-            "rcidx": 1,
-            "power": true,
-            "settemp": 33
-          }
-        ],
-        "batchlight":true,
-        "induction":true,
-        "securityon":true
-      }
-    ]
+  "id": null,
+  "method": "sys.gettime"
+}
+
+# reply system-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "year": 2015,
+    "month":9,
+    "day":7,
+    "hour":16,
+    "min":49,
+    "sec":52
   }
 }
 

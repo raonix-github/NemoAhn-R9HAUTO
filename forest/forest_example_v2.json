@@ -1,0 +1,328 @@
+# ------------------------------------------------------------------------------
+#  methods  - get / set / report
+#  Node to Gateway
+#  - get.{devtype}.devinfo.{idx}
+#  - get.{devtype}.state.{idx}
+#  - get.{devtype}.config.{idx}
+#
+#  - set.{devtype}.state.{idx}
+#  - set.{devtype}.config.{idx}
+#
+#  - get.gateway.devlist
+#  - get.gateway.state
+#  - set.gateway.upgrade
+#
+# Gateway to Node
+#  - get.server.time
+#  - report.{devtype}.state.{idx}
+#  - report.gateway.state
+# ------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
+#  디바이스 정보
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get/forest/devinfo/1",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+	"idx": 1,
+	"id": "123412341234",
+    "roomconcnt" : 3
+  }
+}
+
+
+# ------------------------------------------------------------------------------
+#  상태요청
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.state.1",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+	"idx": 1,
+    "connection":true,
+    "roomcons": [
+    {
+      "rcidx": 1,
+      "power":true,
+      "heating":true,
+      "schedule":true,
+      "intervaltimer":true,
+      "intervaltimeval":30,
+      "curtemp":25.0,
+      "settemp":32.0
+    }
+    ],
+    "keytag":true,
+    "motiondetect":true,
+    "notmovement":true,
+    "gasleakdetect":true,
+    "firedetect":true,
+    "batchlight":true,
+    "outsidelight": false,
+    "induction":true,
+    "securityon":true,
+    "doorlock": true
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  설정값 요청
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.forest.config.1",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": {
+	"idx": 1,
+    "motiontime": 8,
+    "gogouttime": 3,
+    "roomcontemptime": 2,
+    "roomcontempmax": 45,
+    "roomcontempmin": 5,
+    "roomconpresetenable": true,
+    "roomconpresettemp": 25,
+    "roomconpresettime": 30
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  제어
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "set.forest.state.1",
+  "params": {
+    "roomcons": [
+      {
+        "rcidx": 1,
+        "power": true,
+        "settemp": 33
+      }
+    ],
+    "batchlight":true,
+    "induction":true,
+    "securityon":true
+  }
+}
+
+# ACK
+{
+  "jsonrpc": "2.0",
+  "id":null,
+  "result": "success"
+}
+
+# ------------------------------------------------------------------------------
+#  설정값 설정
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "set.forest.config.1",
+  "id": null,
+  "params": {
+    "motiontime": 8,
+    "gogouttime": 3,
+    "roomcontemptime": 2,
+    "roomcontempmax": 45,
+    "roomcontempmin": 5,
+    "roomconpresetenable": true,
+    "roomconpresettemp": 25,
+    "roomconpresettime": 30
+  }
+}
+
+# ACK
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": "success"
+}
+
+
+# ------------------------------------------------------------------------------
+#  gateway 
+#  -
+# ------------------------------------------------------------------------------
+# request
+{
+  "jsonrpc": "2.0",
+  "method": "get.gateway.devlist",
+  "id": null,
+  "params": null
+}
+
+# response
+{
+  "jsonrpc":"2.0”,
+  "id":null,
+  "result": [
+    {
+      "type":"thermostat",
+      "devids":
+        [
+          {"idx":1,"id":"360102000001", "connected":true},
+          {"idx":2,"id":"360102000002", "connected":true},
+          {"idx":3,"id":"360102000003", "connected":false}
+        ]
+    },
+    {
+      "type":"light",
+      "devids":
+        [
+          {"idx":1,"id":"0e0102000001", "connected":true},
+          {"idx":2,"id":"0e0102000001", "connected":false}
+        ]
+    },
+    {
+      "type":"forest",
+      "devids":
+        [
+          {"idx":1, "id":"8a0102000001", "connected":true},
+          {"idx":2,"id":"8a0102000002", "connected":true},
+          {"idx":3,"id":"8a0102000003", "connected":true},
+          {"idx":4,"id":"8a0102000004", "connected":true},
+          {"idx":5,"id":"8a0102000005", "connected":true},
+          {"idx":6,"id":"8a0102000006", "connected":false},
+          {"idx":7,"id":"8a0102000007", "connected":true},
+          {"idx":8,"id":"8a0102000008", "connected":true},
+          {"idx":9,"id":"8a0102000009", "connected":true},
+          {"idx":10,"id":"8a0102000011", "connected":true},
+          {"idx":11,"id":"8a0102000012", "connected":false}
+        ]
+    }
+  ]
+}
+
+# get gateway-state
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "get.gateway.state",
+  "params": null
+}
+
+# reply system-info
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "type":"gateway",
+    "vendor":"raonix",
+    "model" :"dj230",
+    "swver":"2.1.0",
+    "hwver":"1.0.0",
+    "buildcode":"1"
+  }
+}
+
+# set gateway-upgrade
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "set.gateway.upgrade",
+  "params": {
+    "now": true,
+    "newversion": "2.0.1",
+    "filename": "upgrade.bin"
+  }
+}
+
+# ------------------------------------------------------------------------------
+#  report
+#  -
+# ------------------------------------------------------------------------------
+{
+  "jsonrpc":"2.0”,
+  "method": "report.forest.state.1",
+  "id":null,
+  "result": {
+	"timestamp": 123412341234,
+	"idx": 1,
+    "connection":true,
+    "roomcons": [
+    {
+      "rcidx": 1,
+      "power":true
+    }
+    ],
+    "firedetect":true
+  }
+}
+
+{
+  "jsonrpc": "2.0",
+  "method": "report.gateway.state",
+  "id": null,
+  "result": {
+	"timestamp": 123412341234,
+    "type":"gateway",
+    "vendor":"raonix",
+    "model" :"dj230",
+    "swver":"2.1.0",
+    "hwver":"1.0.0",
+    "buildcode":"1"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# time sync  
+#  -
+# ------------------------------------------------------------------------------
+# get server-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "method": "get.server.time",
+  "params": null
+}
+
+# reply server-time
+{
+  "jsonrpc": "2.0",
+  "id": null,
+  "result": {
+    "year": 2015,
+    "month":9,
+    "day":7,
+    "hour":16,
+    "min":49,
+    "sec":52
+  }
+}
+
