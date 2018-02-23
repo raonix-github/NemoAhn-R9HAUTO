@@ -148,6 +148,10 @@
 # 2017-10-11 : gomma
 # *  updatedevstate json 변경 
 #
+# 2018-01-29 : gomma
+# *  updatedevstate 이름 변경
+# *  updatedevstate -> reportdevstate
+#
 # ------------------------------------------------------------------------------
 # Version :
 # ------------------------------------------------------------------------------
@@ -208,7 +212,7 @@ R9HAUTO_JSON
 	"version":1,    # integer
 	"type":<"request","reply","ack">,
 	"msgid":"string    # message id (string)
-	# ACK에서 동일하게 사용{“from”:”0101003d@raonix.co.kr”, “from_type”:”gateway”, “devid”:”01020304”, “msg_type”, 1, “msg”:”PUSH TEST”}
+	# ACK에서 동일하게 사용{"from":"0101003d@raonix.co.kr", "from_type":"gateway", "devid":"01020304", "msg_type", 1, "msg":"PUSH TEST"}
 	"payload":
 	{
 		# 데이타 기본형
@@ -396,7 +400,7 @@ R9HAUTO_JSON
 				"floaten":true,
 				"schedule":true,
 				"raonix_reserve":true,
-				“toomysql":true,
+				"toomysql":true,
 				"connected":true
 			},
 		]
@@ -466,19 +470,19 @@ R9HAUTO_JSON
 						"heating":false,
 						"intervaltimer":true,
 						"intervaltimeval":45
-					}
+					},
 					{"rcidx":2, "power": true, "settemp": 34, "curtemp":26, "schedule":true, "outdoor":false,
 						"hotwater":false,
 						"heating":true,
 						"intervaltimer":true,
 						"intervaltimeval":45
-					}
+					},
 					{"rcidx":3, "power": false, "settemp": 34, "curtemp":28, "schedule":true, "outdoor":true,
 						"hotwater":false,
 						"heating":false,
 						"intervaltimer":true,
 						"intervaltimeval":45
-					}
+					},
 					{"rcidx":4, "power": false, "settemp": 33, "curtemp":27, "schedule":true, "outdoor":false,
 						"hotwater":false,
 						"heating":true,
@@ -503,14 +507,15 @@ R9HAUTO_JSON
 		"command": "getreserv",
 		"indexes":
 		[
-			{"idx":1
+			{
+				"idx":1,
 				"roomcons":
 				[
 					{
 						"rcidx":1
 					}
 				]
-				re}
+			}
 		]
 	}
 }
@@ -534,7 +539,7 @@ R9HAUTO_JSON
 				[
 					{
 						"rcidx":1,
-						"reservtime":208364,
+						"reservtime":208364
 					}
 				]
 			}
@@ -848,7 +853,7 @@ R9HAUTO_JSON
 	"msgid": "msg18",
 	"payload": {
 		"devtype": "generalio",
-		"command": “getstate",
+		"command": "getstate",
 		"indexes": [
 			{
 				"switches": [
@@ -1136,7 +1141,7 @@ R9HAUTO_JSON
 	"msgid":"xxyyzz",
 	"payload":
 	{
-		"devtype”:”fanheater",
+		"devtype":"fanheater",
 		"command":"devinfo"
 	}
 }
@@ -1158,7 +1163,7 @@ R9HAUTO_JSON
 				"schedule": true,
 				"connected": true,
 				"heatermax": 78,
-				"name": “온풍기1",
+				"name": "온풍기1",
 				"inletmax": 50,
 				"inletmin": 40,
 				"heatermin": 44,
@@ -1344,13 +1349,13 @@ R9HAUTO_JSON
 				"id": "ffffffffff",
 				"idx": 1,
 				"connected": true,
-				"name": “전동커튼1”,
-				“unknown”: false,
-				“angle”: true,
-				“level”: true
+				"name": "전동커튼1",
+				"unknown": false,
+				"angle": true,
+				"level": true
 			}
 		],
-		"devtype": “curtain",
+		"devtype": "curtain",
 		"command": "devinfo"
 	}
 }
@@ -1369,7 +1374,7 @@ R9HAUTO_JSON
 	"msgid":"xxyyzz",
 	"payload":
 	{
-		"devtype": “curtain",
+		"devtype": "curtain",
 		"command": "getstate",
 		"indexes":
 		[
@@ -1388,17 +1393,17 @@ R9HAUTO_JSON
 	"payload": {
 		"indexes": [
 			{
-				“openning”:true,
-				“closing”:false,
-				“opened”:false,
-				“closed”:false,
-				“angle”:6,
-				“level”:10,
+				"openning":true,
+				"closing":false,
+				"opened":false,
+				"closed":false,
+				"angle":6,
+				"level":10,
 				"idx": 1,
 				"connection": true
 			}
 		],
-		"devtype": “curtain",
+		"devtype": "curtain",
 		"command": "getstate"
 	}
 }
@@ -3268,11 +3273,11 @@ R9HAUTO_JSON
 	"payload":
 	{
 		"devtype":"gateway",
-		"command”:”pairingstart”,
-		“indexes”:
+		"command":"pairingstart",
+		"indexes":
 		[
 			{
-				“wiretype”:”rf"
+				"wiretype":"rf"
 			}
 		]
 	}
@@ -3290,11 +3295,11 @@ R9HAUTO_JSON
 	"payload":
 	{
 		"devtype":"gateway",
-		"command”:”pairingworking”,
-		“indexes”:
+		"command":"pairingworking",
+		"indexes":
 		[
 			{
-				“time”:5
+				"time":5
 			}
 		]
 	}
@@ -3313,18 +3318,178 @@ R9HAUTO_JSON
 	"payload":
 	{
 		"devtype":"gateway",
-		"command”:”pairingend”,
-		“indexes”:
+		"command":"pairingend",
+		"indexes":
 		[
 			{
-				“state”:”sucess”,
-				“target”:”범용스위치"
+				"state":"sucess",
+				"target":"범용스위치"
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# OTP 보안 기능 설정
+#  - setotp / getotp 명령은 게이트웨이가 친구 추가 모드일때만 사용가능
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"setotp",
+		"otp": {
+			"key":123456,
+			"enable":true,
+			"devlist" : [
+				{
+					"devtype":"doorlock",
+					"devices": [
+						{ "idx":1, "otp":true}
+					]
+				},
+				{
+					"devtype":"light",
+					"devices": [
+						{"idx":1, "otp": true},
+						{"idx":2, "otp": false}
+					]
+				}
+			]
+		}
+	}
+}
+
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getotp"
+	}
+}
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getotp",
+		"otp": {
+			"key":123456,
+			"enable":true,
+			"devlist" : [
+				{
+					"devtype":"doorlock",
+					"devices": [
+						{ "idx":1, "otp":true},
+						{ "idx":5, "otp":false}
+					]
+				},
+				{
+					"devtype":"light",
+					"devices": [
+						{"idx":1, "otp": true},
+						{"idx":2, "otp": false}
+					]
+				}
+			]
+		}
+	}
+}
+
+# OTP  상태 정보 전달
+# GW -> 앱(setstate 명령을 내린 앱)
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"reportotpstate",
+		"indexes": [
+			{
+				"idx":1,
+				"errorcode": 1,
+				"errormessage":"OTP is invalid" 
 			}
 		]
 	}
 }
 
 
+#
+# 전등 설정시 예제
+#
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"light",
+		"command":"setstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"otp": 123456,
+				"switches":
+				[
+					{"swidx":1, "on":true, "dimval":0, "schedule":true},
+					{"swidx":2, "on":true, "dimval":0, "schedule":false}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# Enable report-state
+#  - 
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"setreport",
+		"otp": {
+			"key":123456,
+			"enable":true,
+			"devlist" : [
+				{
+					"devtype":"doorlock",
+					"devices": [
+						{ "idx":1, "otp":true}
+					]
+				},
+				{
+					"devtype":"light",
+					"devices": [
+						{"idx":1, "otp": true},
+						{"idx":2, "otp": false}
+					]
+				}
+			]
+		}
+	}
+}
 ################################################################################
 #
 # Gateway - End
@@ -3391,7 +3556,7 @@ R9HAUTO_JSON
 	{
 		"devtype":"system",
 		"command":"getsysinfo",
-		"info”:
+		"info":
 		{
 			"type":"gateway",
 			"vendor":"raonix",
@@ -3456,7 +3621,7 @@ R9HAUTO_JSON
 		"indexes": [
 			{
 				"to": "mother@gmail.com",
-				"content": "{ \"from\": \”01020304@raonix.co.kr\",\"from_type\": \”gateway\",\"devid\": \"111111\", \"msg_type\": 2, \"msg\": \"가스밸브가열렸습니다.\" }"
+				"content": "{ \"from\": \"01020304@raonix.co.kr\",\"from_type\": \"gateway\",\"devid\": \"111111\", \"msg_type\": 2, \"msg\": \"가스밸브가열렸습니다.\" }"
 
 			}
 		]
@@ -4619,12 +4784,12 @@ R9HAUTO_JSON
 	"msgid":"xxyyzz",
 	"payload":
 	{
-		"devtype”:”homebox",
-		"command”:”getstate",
-		“indexes”:
+		"devtype":"homebox",
+		"command":"getstate",
+		"indexes":
 		[
 			{
-				“idx”:1
+				"idx":1
 			}
 		]
 	}
@@ -4638,11 +4803,11 @@ R9HAUTO_JSON
 	"msgid":"xxyyzz",
 	"payload":
 	{
-		"devtype”:"homebox",
-		"command”:"getstate",
+		"devtype":"homebox",
+		"command":"getstate",
 		"indexes":
 		{
-			“generalio”:
+			"generalio":
 			[
 				{
 					"switches": [
@@ -4666,11 +4831,11 @@ R9HAUTO_JSON
 					"doutstyle": false
 				}
 			],
-			“gasvalve”:
+			"gasvalve":
 			[
 				{"idx": 1, "connection": true, "open": true, "operatingtime":1234}
 			],
-			“security”:
+			"security":
 			[
 				{
 					"idx":1,
@@ -4694,7 +4859,7 @@ R9HAUTO_JSON
 					"doutstyle":true
 				}
 			],
-			“doorlock”:
+			"doorlock":
 			[
 				##### IO 와 동일 스펙 #####
 			]
@@ -4730,7 +4895,7 @@ R9HAUTO_JSON
 	"msgid":"xxyyzz",
 	"payload":
 	{
-		"devtype”:"curtain",
+		"devtype":"curtain",
 		"command":"devinfo"
 	}
 }
@@ -4914,13 +5079,13 @@ R9HAUTO_JSON
 	"payload":
 	{
 		"devtype": "thermostat",
-		"command": "updatedevstate",
+		"command": "reportdevstate",
 		"indexes": [
 			{
 				"idx": 1,
 				"from": "01ffff01@raonix.co.kr",
 				"createtime": 1460689262,
-				"devid": “3601020304",
+				"devid": "3601020304",
 				"connection": true,
 				"roomcons":
 				[
@@ -4944,24 +5109,24 @@ R9HAUTO_JSON
 R9HAUTO_JSON
 {
 	"version":1,
-	"type”:"request",
+	"type":"request",
 	"msgid":"xxyyzz",
 	"payload":
 	{
 		"devtype":"airconditioner",
-		"command”:”updatedevstate",
-		“indexes": [
+		"command":"reportdevstate",
+		"indexes": [
 		{
 			"idx": 1,
-			“from”:”01ffff01@raonix.co.kr",
-			“createtime”: 1460689262,
-			“devid": “0211223344",
+			"from":"01ffff01@raonix.co.kr",
+			"createtime": 1460689262,
+			"devid": "0211223344",
 			"connection": true,
 			"roomcons":
 			[
 				{
 					"rcidx":1,
-					“connected”:true,
+					"connected":true,
 					"schedule":true,
 					"lock":false,
 					"on":true,
@@ -4969,7 +5134,7 @@ R9HAUTO_JSON
 					"direction":3,
 					"wind":2,
 					"settemp":21.5,
-					“curtemp":25.5
+					"curtemp":25.5
 				}
 			]
 		}
@@ -4984,7 +5149,7 @@ R9HAUTO_JSON
 	"msgid": "xxyyzz",
 	"payload": {
 		"devtype": "generalio",
-		"command": "updatedevstate",
+		"command": "reportdevstate",
 		"indexes": [
 			{
 				"idx": 2,
