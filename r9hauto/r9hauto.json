@@ -3469,21 +3469,20 @@ R9HAUTO_JSON
 	{
 		"devtype":"gateway",
 		"command":"setreport",
-		"otp": {
-			"key":123456,
+		"report": {
 			"enable":true,
 			"devlist" : [
 				{
 					"devtype":"doorlock",
 					"devices": [
-						{ "idx":1, "otp":true}
+						{ "idx":1, "report":true}
 					]
 				},
 				{
 					"devtype":"light",
 					"devices": [
-						{"idx":1, "otp": true},
-						{"idx":2, "otp": false}
+						{"idx":1, "report": true},
+						{"idx":2, "report": false}
 					]
 				}
 			]
