@@ -1,0 +1,355 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is NemoAhn API.",
+    "version": "1.0.0",
+    "title": "NemoAhn"
+  },
+  "host": "api.raonix.com",
+  "basePath": "/nemoahnApi/1.0.0",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/xmpps/{domain}/users": {
+      "post": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "계정 등록",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "properties": {
+                "jabberId": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "jabberId",
+                "password",
+                "name",
+                "email"
+              ],
+              "example": {
+                "jabberId": "user1@raonix.co.kr",
+                "password": "123456789",
+                "name": "홍길동",
+                "email": "user@gmail.com"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "integer",
+                  "description": "* 0: 성공\n* 1: 서버에라\n",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              },
+              "example": {
+                "0": null,
+                "result": null
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/xmpps/{domain}/users/{jabberId}": {
+      "head": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "계정 유무 체크",
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "$ref": "#/parameters/jabberIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "계정 조회",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "$ref": "#/parameters/jabberIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "examples": {
+              "application/json": {
+                "jabberId": "user1@raonix.co.kr",
+                "name": "홍길동",
+                "email": "user@gmail.com",
+                "createdTimestamp": 1419995615000,
+                "modifiedTimestamp": 1419995615000
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Xmpp User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "계정 변경",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "$ref": "#/parameters/jabberIdParam"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "jabberId": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "integer",
+                  "description": "* 0: 성공\n* 1: 서버에라\n",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "계정 삭제",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "$ref": "#/parameters/jabberIdParam"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "jabberId": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "jabberId",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "integer",
+                  "description": "* 0: 성공\n* 1: 서버에라\n* 2: 비밀번호 불일치\n* 3: 계정이 존제하지 않음\n",
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Xmpp User not found"
+          }
+        }
+      }
+    },
+    "/xmpps/{domain}/users/{jabberId}/password": {
+      "delete": {
+        "tags": [
+          "xmpp"
+        ],
+        "summary": "패스워드 초기화",
+        "description": "reset이 true이면 패스워드를 초기화 하고 등록된 계정으로 새패스워드 전달.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/xmppDomainParam"
+          },
+          {
+            "$ref": "#/parameters/jabberIdParam"
+          },
+          {
+            "name": "reset",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "xmppDomainParam": {
+      "name": "domain",
+      "type": "string",
+      "in": "path",
+      "required": true
+    },
+    "jabberIdParam": {
+      "name": "jabberId",
+      "type": "string",
+      "in": "path",
+      "required": true
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "jabberId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "createdTimestamp": {
+          "type": "integer"
+        },
+        "modifiedTimestamp": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

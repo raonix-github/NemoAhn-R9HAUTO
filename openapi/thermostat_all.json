@@ -1,0 +1,301 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is NemoAhn API.",
+    "version": "1.0.0",
+    "title": "NemoAhnAPI",
+    "contact": {
+      "name": "RAONIX NemoAhn API Support",
+      "url": "http://www.raonix.com",
+      "email": "raonix@raonix.co.kr"
+    }
+  },
+  "host": "raonix.com",
+  "basePath": "/RAONIX/NemoAhnAPI/1.0.0",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/thermostats/{deviceId}/settingTemperature": {
+      "get": {
+        "tags": [
+          "thermostat"
+        ],
+        "summary": "Find thermostat's state by ID",
+        "description": "Returns a single thermostat",
+        "operationId": "NemoAhnAPIGetThermostat",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ThermostatModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermostat not found"
+          }
+        }
+      }
+    },
+    "/thermostats/{deviceId}/currentTemperature": {
+      "get": {
+        "tags": [
+          "thermostat"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ThermostatModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermostat not found"
+          }
+        }
+      }
+    },
+    "/thermostats/{deviceId}/heating": {
+      "get": {
+        "tags": [
+          "thermostat"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ThermostatModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermostat not found"
+          }
+        }
+      }
+    },
+    "/thermostats/{deviceId}": {
+      "get": {
+        "tags": [
+          "thermostat"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ThermostatModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermostat not found"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "deviceIdParam": {
+      "name": "deviceId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "ID of thermostat to return"
+    },
+    "startDateParam": {
+      "name": "startDate",
+      "in": "query",
+      "type": "integer",
+      "format": "int64",
+      "description": "start of date"
+    },
+    "endDateParam": {
+      "name": "endDate",
+      "in": "query",
+      "type": "integer",
+      "format": "int64",
+      "description": "end of date"
+    },
+    "dataTypeParam": {
+      "name": "dataType",
+      "in": "query",
+      "type": "string",
+      "enum": [
+        "event",
+        "interval"
+      ]
+    },
+    "intervalParam": {
+      "name": "interval",
+      "in": "query",
+      "type": "string",
+      "enum": [
+        "halfHour",
+        "hour",
+        "day",
+        "month"
+      ],
+      "description": "interval between datas"
+    }
+  },
+  "definitions": {
+    "ThermostatModel": {
+      "type": "object",
+      "properties": {
+        "startDate": {
+          "type": "integer"
+        },
+        "endData": {
+          "type": "integer"
+        },
+        "dataType": {
+          "type": "string",
+          "enum": [
+            "event",
+            "interval"
+          ]
+        },
+        "interval": {
+          "description": "If dataType is interval, this is required",
+          "type": "string",
+          "enum": [
+            "halfHour",
+            "hour",
+            "day",
+            "month"
+          ]
+        },
+        "timeStamps": {
+          "description": "If dataType is event, this is required,",
+          "type": "integer"
+        },
+        "currentTemperature": {
+          "$ref": "#/definitions/numberData"
+        },
+        "settingTemperature": {
+          "$ref": "#/definitions/numberData"
+        },
+        "hettingTemperature": {
+          "$ref": "#/definitions/numberData"
+        }
+      }
+    },
+    "numberData": {
+      "type": "object",
+      "properties": {
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "avr": {
+          "type": "number"
+        },
+        "datas": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

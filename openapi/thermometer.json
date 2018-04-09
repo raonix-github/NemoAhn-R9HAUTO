@@ -1,0 +1,146 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is NemoAhn API.",
+    "version": "1.0.0",
+    "title": "NemoAhnAPI",
+    "contact": {
+      "name": "RAONIX NemoAhn API Support",
+      "url": "http://www.raonix.com",
+      "email": "raonix@raonix.co.kr"
+    }
+  },
+  "host": "raonix.com",
+  "basePath": "/RAONIX/NemoAhnAPI/1.0.0",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/thermometers/{deviceId}/currentTemperature": {
+      "get": {
+        "tags": [
+          "thermometer"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref":"https://apigateway.amazonaws.com/restapis/mhqchglc19/models/ThermometerModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermometer not found"
+          }
+        }
+      }
+    },
+    "/thermometers/{deviceId}": {
+      "get": {
+        "tags": [
+          "thermometer"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/deviceIdParam"
+          },
+          {
+            "$ref": "#/parameters/startDateParam"
+          },
+          {
+            "$ref": "#/parameters/endDateParam"
+          },
+          {
+            "$ref": "#/parameters/dataTypeParam"
+          },
+          {
+            "$ref": "#/parameters/intervalParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref":"https://apigateway.amazonaws.com/restapis/mhqchglc19/models/ThermometerModel"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Thermometer not found"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "deviceIdParam": {
+      "name": "deviceId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "ID of thermometer to return"
+    },
+    "startDateParam": {
+      "name": "startDate",
+      "in": "query",
+      "type": "integer",
+      "format": "int64",
+      "description": "start of date"
+    },
+    "endDateParam": {
+      "name": "endDate",
+      "in": "query",
+      "type": "integer",
+      "format": "int64",
+      "description": "end of date"
+    },
+    "dataTypeParam": {
+      "name": "dataType",
+      "in": "query",
+      "type": "string",
+      "enum": [
+        "event",
+        "interval"
+      ]
+    },
+    "intervalParam": {
+      "name": "interval",
+      "in": "query",
+      "type": "string",
+      "enum": [
+        "halfHour",
+        "hour",
+        "day",
+        "month"
+      ],
+      "description": "interval between datas"
+    }
+  }
+}
