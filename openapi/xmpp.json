@@ -1,9 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is NemoAhn API.",
-    "version": "1.0.0",
-    "title": "NemoAhn"
+    "title": "NemoAhn",
+    "version": "1.0.0"
   },
   "host": "api.raonix.com",
   "basePath": "/nemoahnApi/1.0.0",
@@ -32,32 +31,7 @@
             "name": "user",
             "required": true,
             "schema": {
-              "properties": {
-                "jabberId": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "jabberId",
-                "password",
-                "name",
-                "email"
-              ],
-              "example": {
-                "jabberId": "user1@raonix.co.kr",
-                "password": "123456789",
-                "name": "홍길동",
-                "email": "user@gmail.com"
-              }
+              "$ref": "#/definitions/UserInputModel"
             }
           }
         ],
@@ -65,21 +39,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "integer",
-                  "description": "* 0: 성공\n* 1: 서버에라\n",
-                  "enum": [
-                    0,
-                    1
-                  ]
-                }
-              },
-              "example": {
-                "0": null,
-                "result": null
-              }
+              "$ref": "#/definitions/UserOutputModel"
             }
           },
           "400": {
@@ -87,6 +47,9 @@
           },
           "404": {
             "description": "User not found"
+          },
+          "409": {
+            "description": "User conflict"
           }
         }
       }
@@ -134,7 +97,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserOutputModel"
             },
             "examples": {
               "application/json": {
@@ -150,7 +113,7 @@
             "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "Xmpp User not found"
+            "description": "User not found"
           }
         }
       },
@@ -176,21 +139,7 @@
             "name": "user",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "jabberId": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/UserInputModel"
             }
           }
         ],
@@ -198,16 +147,15 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "integer",
-                  "description": "* 0: 성공\n* 1: 서버에라\n",
-                  "enum": [
-                    0,
-                    1
-                  ]
-                }
+              "$ref": "#/definitions/UserOutputModel"
+            },
+            "examples": {
+              "application/json": {
+                "jabberId": "user1@raonix.co.kr",
+                "name": "홍길동",
+                "email": "user@gmail.com",
+                "createdTimestamp": 1419995615000,
+                "modifiedTimestamp": 1419995615000
               }
             }
           },
@@ -259,28 +207,16 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "integer",
-                  "description": "* 0: 성공\n* 1: 서버에라\n* 2: 비밀번호 불일치\n* 3: 계정이 존제하지 않음\n",
-                  "enum": [
-                    0,
-                    1,
-                    2,
-                    3
-                  ]
-                }
-              }
-            }
+            "description": "Successful operation"
           },
           "400": {
             "description": "Invalid ID supplied"
           },
+          "401": {
+            "description": "Password is invalid"
+          },
           "404": {
-            "description": "Xmpp User not found"
+            "description": "User not found"
           }
         }
       }
@@ -307,7 +243,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "Successful operation"
           },
           "404": {
             "description": "User not found"
@@ -331,7 +267,30 @@
     }
   },
   "definitions": {
-    "User": {
+    "UserInputModel": {
+      "type": "object",
+      "properties": {
+        "jabberId": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "jabberId",
+        "password",
+        "name",
+        "email"
+      ]
+    },
+    "UserOutputModel": {
       "type": "object",
       "properties": {
         "jabberId": {

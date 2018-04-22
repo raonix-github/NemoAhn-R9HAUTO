@@ -1,0 +1,186 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://api.raonix.com/nemoahnApi/1.0.0'
+info:
+  title: NemoAhn
+  version: 1.0.0
+paths:
+  '/xmpps/{domain}/users':
+    post:
+      tags:
+        - xmpp
+      summary: 계정 등록
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutputModel'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+        '409':
+          description: User conflict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputModel'
+        required: true
+  '/xmpps/{domain}/users/{jabberId}':
+    head:
+      tags:
+        - xmpp
+      summary: 계정 유무 체크
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+        - $ref: '#/components/parameters/jabberIdParam'
+      responses:
+        '200':
+          description: User found
+        '404':
+          description: User not found
+    get:
+      tags:
+        - xmpp
+      summary: 계정 조회
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+        - $ref: '#/components/parameters/jabberIdParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutputModel'
+              examples:
+                response:
+                  value:
+                    jabberId: user1@raonix.co.kr
+                    name: 홍길동
+                    email: user@gmail.com
+                    createdTimestamp: 1419995615000
+                    modifiedTimestamp: 1419995615000
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - xmpp
+      summary: 계정 변경
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+        - $ref: '#/components/parameters/jabberIdParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutputModel'
+              examples:
+                response:
+                  value:
+                    jabberId: user1@raonix.co.kr
+                    name: 홍길동
+                    email: user@gmail.com
+                    createdTimestamp: 1419995615000
+                    modifiedTimestamp: 1419995615000
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputModel'
+    delete:
+      tags:
+        - xmpp
+      summary: 계정 삭제
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+        - $ref: '#/components/parameters/jabberIdParam'
+        - name: password
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Password is invalid
+        '404':
+          description: User not found
+  '/xmpps/{domain}/users/{jabberId}/password':
+    delete:
+      tags:
+        - xmpp
+      summary: 패스워드 초기화
+      description: |
+        reset이 true이면 패스워드를 초기화 하고 등록된 계정으로 새패스워드 전달.
+      parameters:
+        - $ref: '#/components/parameters/xmppDomainParam'
+        - $ref: '#/components/parameters/jabberIdParam'
+        - name: password
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: User not found
+components:
+  parameters:
+    xmppDomainParam:
+      name: domain
+      in: path
+      required: true
+      schema:
+        type: string
+    jabberIdParam:
+      name: jabberId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    UserInputModel:
+      type: object
+      properties:
+        jabberId:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - jabberId
+        - password
+        - name
+        - email
+    UserOutputModel:
+      type: object
+      properties:
+        jabberId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        createdTimestamp:
+          type: integer
+        modifiedTimestamp:
+          type: integer
