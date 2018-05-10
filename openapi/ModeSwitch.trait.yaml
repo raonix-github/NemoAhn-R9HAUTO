@@ -1,0 +1,31 @@
+ModeSwitchAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+    settings:
+      type: array
+      items:
+          type: string 
+ModeSwitchState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: string
+ModeSwitchCommand:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: string

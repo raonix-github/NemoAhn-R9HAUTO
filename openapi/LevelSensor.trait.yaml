@@ -1,0 +1,27 @@
+LevelSensorAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+    range:
+      type: object
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+        step:
+          type: number
+LevelSensorState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    currentValue:
+      type: number

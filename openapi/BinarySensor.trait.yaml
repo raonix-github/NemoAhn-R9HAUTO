@@ -1,0 +1,27 @@
+BinarySwitchAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+BinarySwitchState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: boolean
+BinarySwitchCommand:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: boolean

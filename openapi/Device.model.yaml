@@ -1,0 +1,41 @@
+Device:
+  type: object
+  properties:
+    id:
+      type: string
+    type:
+      type: string
+    traits:
+      type: array
+    items:
+      type: string
+      enum:
+        - binarySwitch
+        - levelSwitch
+        - binarySensor
+        - levelSensor
+        - modeSwitch
+        - temperatureControl
+    name:
+      type: string
+    nickname:
+      type: string
+    willReportState:
+      type: boolean
+    deviceInfo:
+      type: object
+      properties:
+        manufacturer:
+          type: string
+        model:
+          type: string
+        hwVersion:
+          type: string
+        swVersion:
+          type: string
+        attributes:
+          anyOf:
+            - $ref: '#/components/schemas/TemperatureControlAttribues'
+            - $ref: '#/components/schemas/BinarySwitchAttribues'
+        customData:
+          type: object

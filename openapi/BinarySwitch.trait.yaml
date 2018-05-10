@@ -1,0 +1,27 @@
+OnOffAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+OnOffState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    on:
+      type: boolean
+OnOffCommand:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    on:
+      type: boolean
