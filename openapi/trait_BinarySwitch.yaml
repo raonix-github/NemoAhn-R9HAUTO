@@ -1,0 +1,48 @@
+BinarySwitchAttributes:
+  type: object
+  properties:
+    binarySwitches:
+      type: array
+      items:
+        $ref: '#/BinarySwitchAttribute'
+BinarySwitchStates:
+  type: object
+  properties:
+    binarySwitches:
+      type: array
+      items:
+        $ref: '#/BinarySwitchState'
+BinarySwitchCommands:
+  type: object
+  properties:
+    binarySwitches:
+      type: array
+      items:
+        $ref: '#/BinarySwitchCommand'
+BinarySwitchAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+BinarySwitchState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    'on':
+      type: boolean
+BinarySwitchCommand:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    'on':
+      type: boolean

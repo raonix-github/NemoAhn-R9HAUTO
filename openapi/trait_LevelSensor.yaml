@@ -1,3 +1,17 @@
+LevelSensorAttributes:
+  type: object
+  properties:
+    levelSensors:
+      type: array
+      items:
+        $ref: '#/LevelSensorAttribute'
+LevelSensorStates:
+  type: object
+  properties:
+    levelSensors:
+      type: array
+      items:
+        $ref: '#/LevelSensorState'
 LevelSensorAttribute:
   type: object
   properties:

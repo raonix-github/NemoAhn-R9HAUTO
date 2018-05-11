@@ -1,3 +1,24 @@
+ModeSwitchAttributes:
+  type: object
+  properties:
+    modeSwitches:
+      type: array
+      items:
+        $ref: '#/ModeSwitchAttribute'
+ModeSwitchStates:
+  type: object
+  properties:
+    modeSwitches:
+      type: array
+      items:
+        $ref: '#/ModeSwitchState'
+ModeSwitchCommands:
+  type: object
+  properties:
+    modeSwitches:
+      type: array
+      items:
+        $ref: '#/ModeSwitchCommand'
 ModeSwitchAttribute:
   type: object
   properties:
@@ -10,7 +31,7 @@ ModeSwitchAttribute:
     settings:
       type: array
       items:
-          type: string 
+        type: string
 ModeSwitchState:
   type: object
   properties:

@@ -1,0 +1,32 @@
+BinarySensorAttributes:
+  type: object
+  properties:
+    binarySensors:
+      type: array
+      items:
+        $ref: '#/BinarySensorAttribute'
+BinarySensorStates:
+  type: object
+  properties:
+    binarySensors:
+      type: array
+      items:
+        $ref: '#/BinarySensorState'
+BinarySensorAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+BinarySensorState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: boolean

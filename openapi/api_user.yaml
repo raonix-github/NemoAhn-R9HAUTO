@@ -1,0 +1,297 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://api.raonix.com/nemoahnApi/1.0.0'
+info:
+  title: NemoAhn
+  version: 1.0.0
+paths:
+  /users:
+    post:
+      tags:
+        - User
+      summary: 계정 등록
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutputModel'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+        '409':
+          description: User conflict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputModel'
+        required: true
+  '/users/{userId}':
+    head:
+      tags:
+        - User
+      summary: 계정 유무 체크
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        '200':
+          description: User found
+        '404':
+          description: User not found
+    get:
+      tags:
+        - User
+      summary: 계정 조회
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutputModel'
+              examples:
+                response:
+                  value:
+                    jabberId: user1@raonix.co.kr
+                    name: 홍길동
+                    email: user@gmail.com
+                    createdTimestamp: 1419995615000
+                    modifiedTimestamp: 1419995615000
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - User
+      summary: 계정 변경
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOutput'
+              examples:
+                response:
+                  value:
+                    jabberId: user1@raonix.co.kr
+                    name: 홍길동
+                    email: user@gmail.com
+                    createdTimestamp: 1419995615000
+                    modifiedTimestamp: 1419995615000
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+    delete:
+      tags:
+        - User
+      summary: 계정 삭제
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - name: password
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Password is invalid
+        '404':
+          description: User not found
+  '/users/{userId}/password':
+    delete:
+      tags:
+        - User
+      summary: 패스워드 초기화
+      description: |
+        reset이 true이면 패스워드를 초기화 하고 등록된 계정으로 새패스워드 전달.
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - name: password
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: User not found
+  '/users/{userId}/devices':
+    get:
+      tags:
+        - Device
+      summary: 디바이스 목록 조회
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'Device.model.yaml#/DeviceAttribute'
+        '404':
+          description: User not found
+  '/users/{userId}/devices/{deviceId}':
+    get:
+      tags:
+        - Device
+      summary: 디바이스 상태 요청
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/deviceIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'Device.model.yaml#/DeviceState'
+    put:
+      tags:
+        - Device
+      summary: 디바이스 상태 변경
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/deviceIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'Device.model.yaml#/DeviceCommand'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'Device.model.yaml#/DeviceState'
+    delete:
+      tags:
+        - Device
+      summary: 디바이스 삭제
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/deviceIdParam'        
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: User not found
+  '/users/{userId}/devices/{deviceId}/database':
+    get:
+      tags:
+        - Device
+      summary: 디바이스 상태 DB 요청
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/deviceIdParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/endParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'Device.model.yaml#/DeviceDbState'
+components:
+  parameters:
+    userIdParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+    deviceIdParam:
+      name: deviceId
+      in: path
+      required: true
+      description: Device'Id
+      schema:
+        type: string
+    startParam:
+      name: start
+      in: query
+      description: The start time for the query
+      schema:
+        type: integer
+        format: int64
+    endParam:
+      name: end
+      in: query
+      description: The end time for the query
+      schema:
+        type: integer
+        format: int64
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 20
+  schemas:
+    UserInput:
+      type: object
+      properties:
+        userId:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - userId
+        - password
+        - name
+        - email
+    UserOutput:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        createdTimestamp:
+          type: integer
+        modifiedTimestamp:
+          type: integer

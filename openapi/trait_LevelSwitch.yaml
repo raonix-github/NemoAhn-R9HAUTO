@@ -1,4 +1,25 @@
-TemperatureControlAttribute:
+LevelSwitchAttributes:
+  type: object
+  properties:
+    levelSwitches:
+      type: array
+      items:
+        $ref: '#/LevelSwitchAttribute'
+LevelSwitchStates:
+  type: object
+  properties:
+    levelSwitches:
+      type: array
+      items:
+        $ref: '#/LevelSwitchState'
+LevelSwitchCommands:
+  type: object
+  properties:
+    levelSwitches:
+      type: array
+      items:
+        $ref: '#/LevelSwitchCommand'
+LevelSwitchAttribute:
   type: object
   properties:
     id:
@@ -9,9 +30,6 @@ TemperatureControlAttribute:
       type: string
     unit:
       type: string
-      enum:
-        - C
-        - F
     range:
       type: object
       properties:
@@ -21,7 +39,7 @@ TemperatureControlAttribute:
           type: number
         step:
           type: number
-TemperatureControlState:
+LevelSwitchState:
   type: object
   properties:
     id:
@@ -32,7 +50,7 @@ TemperatureControlState:
       type: number
     currentValue:
       type: number
-TemperatureControlCommand:
+LevelSwitchCommand:
   type: object
   properties:
     id:

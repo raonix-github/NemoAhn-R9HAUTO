@@ -22,15 +22,15 @@
 					{"id": "trait.1234.1234.1", "name": "temperature1", "nickname": "난방", "unit": "C", "range" : {"min", 0, "max": 40, "step": 1}},
 					{"id": "trait.1234.1234.2", "name": "temperature2", "nickname": "온수", "unit": "C", "range" : {"min", 0, "max": 100, "step": 5}}
 				],
-				"onOffs": [
+				"binarySwitches": [
 					{"name": "onOff1", "nickname": "전원", "id": "trait.1234.1234.3"},
 					{"name": "onOff2", "nickname": "예약", "id": "trait.1234.1234.4"},
 					{"name": "onOff3", "nickname": "외출", "id": "trait.1234.1234.4"}
 				],
-				"levels": [
+				"levelSensors": [
 					{"name": "level1", "nickname": "습도", "id": "trait.1234.1234.5", "unit": "%", "range" : {"min", 0, "max": 100, "step": 1}}
 				],
-				"modes": [
+				"modeSwitches": [
 					{"id": "xxx", "name": "mode1", "nickname": "모드", "settings": ["난방", "온수"]}
 				]
 			},
@@ -51,13 +51,13 @@
 		{"name": "temperature1", "settingValue": 25, "currentValue": 32.0},
 		{"name": "temperature2", "settingValue": 12, "currentValue": 32.0}
 	],
-	"onOffs": [
-		{"id": "trait.1234.1234.3", "on": true}
+	"binarySwitches": [
+		{"id": "trait.1234.1234.3", "settingValue": true}
 	],
-	"levels": [
-		{"id": "1234.1234.1234.1", "level": 12}
+	"levelSensors": [
+		{"id": "1234.1234.1234.1", "currentValue": 12}
 	],
-	"modes": [
+	"modeSwitches": [
 		{"id": "xxx", "settingValue": "온수"}
 	]
 }
@@ -68,10 +68,13 @@
 	"temperatureControls": [
 		{"id": "trait.1234.1234.1", "settingValue": 25}
 	],
-	"onOffs": [
-		{"id": "trait.1234.1234.3", "on": false}
+	"binarySwitches": [
+		{"id": "trait.1234.1234.3", "settingValue": false}
 	],
-	"levels": [
-		{"id": "1234.1234.1234.1", "level": 42}
+	"levelSensors": [
+		{"id": "1234.1234.1234.1", "currentValue": 42}
+	],
+	"modeSwitches": [
+		{"id": "1234.1234.1234.1", "settingValue": "온수"}
 	]
 }

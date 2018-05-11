@@ -1,0 +1,64 @@
+TemperatureControlAttributes:
+  type: object
+  properties:
+    temperatureControls:
+      type: array
+      items:
+        $ref: '#/TemperatureControlAttribute'
+TemperatureControlStates:
+  type: object
+  properties:
+    temperatureControls:
+      type: array
+      items:
+        $ref: '#/TemperatureControlState'
+TemperatureControlCommands:
+  type: object
+  properties:
+    temperatureControls:
+      type: array
+      items:
+        $ref: '#/TemperatureControlCommand'
+TemperatureControlAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    nickname:
+      type: string
+    unit:
+      type: string
+      enum:
+        - C
+        - F
+    range:
+      type: object
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+        step:
+          type: number
+TemperatureControlState:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: number
+    currentValue:
+      type: number
+TemperatureControlCommand:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    settingValue:
+      type: number
