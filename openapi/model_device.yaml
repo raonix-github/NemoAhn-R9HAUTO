@@ -1,0 +1,90 @@
+DeviceAttribute:
+  type: object
+  properties:
+    id:
+      type: string
+    type:
+      type: string
+    traits:
+      type: array
+      items:
+        type: string
+        enum:
+          - binarySwitch
+          - levelSwitch
+          - binarySensor
+          - levelSensor
+          - modeSwitch
+          - temperatureControl
+    name:
+      type: string
+    nickname:
+      type: string
+    willReportState:
+      type: boolean
+    deviceInfo:
+      type: object
+      properties:
+        manufacturer:
+          type: string
+        model:
+          type: string
+        hwVersion:
+          type: string
+        swVersion:
+          type: string
+        attributes:
+          type: object
+          properties:
+            anyOf:
+              - $ref: 'BinarySensor.trait.yaml#/BinarySensorAttribues'
+              - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchAttribues'
+              - $ref: 'LevelSensor.trait.yaml#/LevelSensorAttribues'
+              - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchAttribues'
+              - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchAttribues'
+              - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlAttributes'
+        customData:
+          type: object
+DeviceState:
+  type: object
+  properties:
+    online:
+      type: boolean
+    anyOf:
+      - $ref: 'BinarySensor.trait.yaml#/BinarySensorStates'
+      - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchStates'
+      - $ref: 'LevelSensor.trait.yaml#/LevelSensorStates'
+      - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchStates'
+      - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchStates'
+      - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlStates'
+DeviceCommand:
+  type: object
+  properties:
+    anyOf:
+      - $ref: 'BinarySensor.trait.yaml#/BinarySensorCommands'
+      - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchCommands'
+      - $ref: 'LevelSensor.trait.yaml#/LevelSensorCommands'
+      - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchCommands'
+      - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchCommands'
+      - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlCommands'
+DeviceDbState:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Trait에서 정의된 State의 key 이름
+    max:
+      type: number
+    min:
+      type: number
+    avr:
+      type: number
+    datas:
+      type: array
+      items:
+        type: array
+        items:
+          allOf:
+            - type: integer
+              format: int64
+            - type: number
