@@ -28,5 +28,5 @@ BinarySensorState:
       type: string
     name:
       type: string
-    settingValue:
+    currentValue:
       type: boolean

@@ -35,7 +35,7 @@ BinarySwitchState:
       type: string
     name:
       type: string
-    'on':
+    settingValue:
       type: boolean
 BinarySwitchCommand:
   type: object
@@ -44,5 +44,5 @@ BinarySwitchCommand:
       type: string
     name:
       type: string
-    'on':
+    settingValue:
       type: boolean
