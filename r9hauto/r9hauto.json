@@ -3136,8 +3136,8 @@ R9HAUTO_JSON
 		"command":"deldev",
 		"indexes":
 		[
-			{"idx":1, "type", "thermostat"},
-			{"idx":2, "type", "gasvalve"}
+			{"idx":1, "type": "thermostat"},
+			{"idx":2, "type": "gasvalve"}
 		]
 	}
 }
