@@ -3502,6 +3502,41 @@ R9HAUTO_JSON
 		}
 	}
 }
+
+# ------------------------------------------------------------------------------
+# Gateway 상태 정보 
+#  - 
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getstate"
+	}
+}
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"gateway",
+		"command":"getstate",
+		"state": {
+			"friendstate": 0,
+			"ttarfstate": 0,
+			"tta485state": 0,
+			"pairingresult": 0
+		}
+	}
+}
+
+
 ################################################################################
 #
 # Gateway - End
