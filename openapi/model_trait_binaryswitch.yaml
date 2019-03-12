@@ -1,21 +1,21 @@
 BinarySwitchAttributes:
   type: object
   properties:
-    binarySwitches:
+    binarySwitche:
       type: array
       items:
         $ref: '#/BinarySwitchAttribute'
 BinarySwitchStates:
   type: object
   properties:
-    binarySwitches:
+    binarySwitche:
       type: array
       items:
         $ref: '#/BinarySwitchState'
 BinarySwitchCommands:
   type: object
   properties:
-    binarySwitches:
+    binarySwitche:
       type: array
       items:
         $ref: '#/BinarySwitchCommand'

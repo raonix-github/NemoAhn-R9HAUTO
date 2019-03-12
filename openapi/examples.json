@@ -1,80 +1,59 @@
-# Device Info
+# Device Attribute
 # Get : /{userId}/devices
 {
-	"devices": [
-		{
-			"id": "device.1234.1234.1234",
-			"type": "thermostat",
-			"tratis": [
-				"temperatureControl", "binarySwitch", "levelSwitch"
-			],
-			"name": "온도조절기1",
-			"nickname": "안방",
-			"willReportState": true,
-			"deviceInfo": {
-				"manufacturer": "RAONIX",
-				"model": "AS101",
-				"hwVersion": "1.0",
-				"swVersion": "1.0.1"
-			},
-			"attributes": {
-				"temperatureControls": [
-					{"id": "trait.1234.1234.1", "name": "temperature1", "nickname": "난방", "unit": "C", "range" : {"min", 0, "max": 40, "step": 1}},
-					{"id": "trait.1234.1234.2", "name": "temperature2", "nickname": "온수", "unit": "C", "range" : {"min", 0, "max": 100, "step": 5}}
-				],
-				"binarySwitches": [
-					{"name": "onOff1", "nickname": "전원", "id": "trait.1234.1234.3"},
-					{"name": "onOff2", "nickname": "예약", "id": "trait.1234.1234.4"},
-					{"name": "onOff3", "nickname": "외출", "id": "trait.1234.1234.4"}
-				],
-				"levelSensors": [
-					{"name": "level1", "nickname": "습도", "id": "trait.1234.1234.5", "unit": "%", "range" : {"min", 0, "max": 100, "step": 1}}
-				],
-				"modeSwitches": [
-					{"id": "xxx", "name": "mode1", "nickname": "모드", "settings": ["난방", "온수"]}
-				]
-			},
-			"customData": {
-				"foo": "abcdef",
-				"bar": "123456"
-			}
-		}
-	]
+  "devices": [
+    {
+      "id": "device.1234.1234.1234",
+      "type": "thermostat",
+      "name": "thermostat1",
+      "nickname": "안방",
+      "willReportState": true,
+      "deviceInfo": {
+		    "serial": "52391234",
+        "manufacturer": "RAONIX",
+        "model": "AS101",
+        "hwVersion": "1.0",
+        "swVersion": "1.0.1"
+      },
+      "traits": [
+          {"id": "1234.1234.1234", "type": "temperatureControl", "name": "heating", "nickname": "난방", "unit": "C", "min": 0, "max": 40, "step": 1},
+          {"id": "1234.1234.1234", "type": "temperatureControl", "name": "hotwater", "nickname": "온수", "unit": "C", "min": 0, "max": 100, "step": 5},
+          {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff1", "nickname": "전원"},
+          {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff2", "nickname": "예약"},
+          {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff3", "nickname": "외출"},
+          {"id": "1234.1234.1234", "type": "levelSensor", "name": "level1", "nickname": "습도", "unit": "%", "min": 0, "max": 100, "step": 1},
+          {"id": "1234.1234.1234", "type": "modeSwitch", "name": "mode1", "nickname": "모드", "settings": ["난방", "온수"]}
+      ],
+      "customData": {
+        "foo": "abcdef",
+        "bar": "123456"
+      }
+    }
+  ]
 }
 
 # Device State
 # GET : /devices/{deviceId}
 {
-	"online": true,
-
-	"temperatureControls": [
-		{"name": "temperature1", "settingValue": 25, "currentValue": 32.0},
-		{"name": "temperature2", "settingValue": 12, "currentValue": 32.0}
-	],
-	"binarySwitches": [
-		{"id": "trait.1234.1234.3", "settingValue": true}
-	],
-	"levelSensors": [
-		{"id": "1234.1234.1234.1", "currentValue": 12}
-	],
-	"modeSwitches": [
-		{"id": "xxx", "settingValue": "온수"}
-	]
+  "online": true,
+  "traits" : [
+    {"id": "1234.1234.1234", "type": "temperatureControl", "name": "heating", "settingValue": 25, "currentValue": 32.0},
+    {"id": "1234.1234.1234", "type": "temperatureControl", "name": "hotwater", "settingValue": 12, "currentValue": 32.0},
+    {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff1", "settingValue": true},
+    {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff1", "settingValue": false},
+    {"id": "1234.1234.1234", "type": "binarySwitch", "name": "onOff1", "settingValue": true},
+    {"id": "1234.1234.1234", "type": "levelSensor", "name": "level1", "currentValue": 53},
+    {"id": "1234.1234.1234", "type": "modeSwitch", "name": "mode1", "settingValue": "온수"}
+  ]
 }
 
 # Device Control
 # PUT : /devices/{deviceId}
 {
-	"temperatureControls": [
-		{"id": "trait.1234.1234.1", "settingValue": 25}
-	],
-	"binarySwitches": [
-		{"id": "trait.1234.1234.3", "settingValue": false}
-	],
-	"levelSensors": [
-		{"id": "1234.1234.1234.1", "currentValue": 42}
-	],
-	"modeSwitches": [
-		{"id": "1234.1234.1234.1", "settingValue": "온수"}
-	]
+  "traits": [
+    {"id": "trait.1234.1234.1", "type": "levelSwitch", "settingValue": 25},
+    {"id": "trait.1234.1234.3", "settingValue": false},
+    {"id": "1234.1234.1234.1", "settingValue": 42},
+    {"id": "1234.1234.1234.1", "settingValue": "난방"}
+  ]
 }

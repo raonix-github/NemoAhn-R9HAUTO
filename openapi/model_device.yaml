@@ -5,17 +5,6 @@ DeviceAttribute:
       type: string
     type:
       type: string
-    traits:
-      type: array
-      items:
-        type: string
-        enum:
-          - binarySwitch
-          - levelSwitch
-          - binarySensor
-          - levelSensor
-          - modeSwitch
-          - temperatureControl
     name:
       type: string
     nickname:
@@ -33,18 +22,29 @@ DeviceAttribute:
           type: string
         swVersion:
           type: string
-        attributes:
-          type: object
-          properties:
-            anyOf:
-              - $ref: 'BinarySensor.trait.yaml#/BinarySensorAttribues'
-              - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchAttribues'
-              - $ref: 'LevelSensor.trait.yaml#/LevelSensorAttribues'
-              - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchAttribues'
-              - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchAttribues'
-              - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlAttributes'
-        customData:
-          type: object
+    traits:
+      type: array
+      items:
+        type: string
+        enum:
+          - binarySwitch
+          - binarySensor
+          - levelSwitch
+          - levelSensor
+          - modeSwitch
+          - temperatureControl
+    attributes:
+      type: object
+      properties:
+        anyOf:
+          - $ref: 'model_trait_binarysensor.yaml#/BinarySensorAttribues'
+          - $ref: 'model_trait_binaryswitch.yaml#/BinarySwitchAttribues'
+          - $ref: 'model_trait_levelsensor.yaml#/LevelSensorAttribues'
+          - $ref: 'model_trait_levelswitch.yaml#/LevelSwitchAttribues'
+          - $ref: 'model_trait_modeswitch.yaml#/ModeSwitchAttribues'
+          - $ref: 'model_trait_temperaturecontrol.yaml#/TemperatureControlAttributes'
+    customData:
+      type: object
 DeviceState:
   type: object
   properties:

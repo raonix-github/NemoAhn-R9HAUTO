@@ -16,9 +16,9 @@ paths:
         - Device
       summary: 디바이스 목록 조회
       parameters:
-        - $ref: '#/components/parameters/userIdParam'
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/userid'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           description: OK
@@ -86,7 +86,7 @@ components:
       description: Device'Id
       schema:
         type: string
-    userIdParam:
+    userid:
       name: userId
       in: query
       description: 사용자 ID
@@ -106,7 +106,7 @@ components:
       schema:
         type: integer
         format: int64
-    offsetParam:
+    offset:
       name: offset
       in: query
       description: Number of items to skip before returning the results.
@@ -115,7 +115,7 @@ components:
         format: int32
         minimum: 0
         default: 0
-    limitParam:
+    limit:
       name: limit
       in: query
       description: Maximum number of items to return.
@@ -125,3 +125,126 @@ components:
         minimum: 1
         maximum: 100
         default: 20
+  schemas:
+    DeviceAttribute:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        willReportState:
+          type: boolean
+        deviceInfo:
+          type: object
+          properties:
+            manufacturer:
+              type: string
+            model:
+              type: string
+            hwVersion:
+              type: string
+            swVersion:
+              type: string
+        traits:
+          type: array
+          items:
+            type: string
+            enum:
+              - binarySwitch
+              - binarySensor
+              - levelSwitch
+              - levelSensor
+              - modeSwitch
+              - temperatureControl
+        attributes:
+          type: object
+          properties:
+            anyOf:
+              - $ref: 'model_trait_binarysensor.yaml#/BinarySensorAttribues'
+              - $ref: 'model_trait_binaryswitch.yaml#/BinarySwitchAttribues'
+              - $ref: 'model_trait_levelsensor.yaml#/LevelSensorAttribues'
+              - $ref: 'model_trait_levelswitch.yaml#/LevelSwitchAttribues'
+              - $ref: 'model_trait_modeswitch.yaml#/ModeSwitchAttribues'
+              - $ref: 'model_trait_temperaturecontrol.yaml#/TemperatureControlAttributes'
+        customData:
+          type: object
+    DeviceState:
+      type: object
+      properties:
+        online:
+          type: boolean
+          anyOf:
+            - $ref: 'BinarySensor.trait.yaml#/BinarySensorStates'
+            - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchStates'
+            - $ref: 'LevelSensor.trait.yaml#/LevelSensorStates'
+            - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchStates'
+            - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchStates'
+            - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlStates'
+    DeviceCommand:
+      type: object
+      properties:
+        anyOf:
+          - $ref: 'BinarySensor.trait.yaml#/BinarySensorCommands'
+          - $ref: 'BinarySwitch.trait.yaml#/BinarySwitchCommands'
+          - $ref: 'LevelSensor.trait.yaml#/LevelSensorCommands'
+          - $ref: 'LevelSwitch.trait.yaml#/LevelSwitchCommands'
+          - $ref: 'ModeSwitch.trait.yaml#/ModeSwitchCommands'
+          - $ref: 'TemperatureContro.trait.yaml#/TemperatureControlCommands'
+    DeviceDbState:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Trait에서 정의된 State의 key 이름
+        max:
+          type: number
+        min:
+          type: number
+        avr:
+          type: number
+        datas:
+          type: array
+          items:
+            type: array
+            items:
+              allOf:
+                - type: integer
+                  format: int64
+                - type: number
+    BinarySensorAttributes:
+      type: object
+      properties:
+        binarySensors:
+          type: array
+          items:
+            $ref: '#/BinarySensorAttribute'
+    BinarySensorStates:
+      type: object
+      properties:
+        binarySensors:
+          type: array
+          items:
+            $ref: '#/BinarySensorState'
+    BinarySensorAttribute:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+    BinarySensorState:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        currentValue:
+          type: boolean

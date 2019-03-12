@@ -269,7 +269,7 @@ components:
     UserInput:
       type: object
       properties:
-        userId:
+        id:
           type: string
         password:
           type: string
@@ -278,14 +278,14 @@ components:
         email:
           type: string
       required:
-        - userId
+        - id
         - password
         - name
         - email
     UserOutput:
       type: object
       properties:
-        userId:
+        id:
           type: string
         name:
           type: string
