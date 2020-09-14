@@ -212,8 +212,8 @@ R9HAUTO_JSON
 	"version":1,    # integer
 	"type":<"request","reply","ack">,
 	"msgid":"string    # message id (string)
-	# ACK에서 동일하게 사용{"from":"0101003d@raonix.co.kr", "from_type":"gateway", "devid":"01020304", "msg_type", 1, "msg":"PUSH TEST"}
-	"payload":
+	# ACK에서 동일하게 사용
+  "payload":
 	{
 		# 데이타 기본형
 	}
@@ -3694,7 +3694,7 @@ R9HAUTO_JSON
 		{
 			"type":"gateway",
 			"vendor":"raonix",
-			"model" :"dj200"
+			"model" :"dj200",
 			"swver":"2.1.0",
 			"hwver":"1.0.0"
 		}
@@ -4123,6 +4123,8 @@ R9HAUTO_JSON
 	"type": "reply",
 	"msgid": "msg268",
 	"payload": {
+		"devtype": "airsensor",
+		"command": "getstate",
 		"indexes": [
 			{
 				"idx": 2,
@@ -4141,9 +4143,7 @@ R9HAUTO_JSON
 					}
 				]
 			}
-		],
-		"devtype": "airsensor",
-		"command": "getstate"
+		]
 	}
 }
 # ------------------------------------------------------------------------------
@@ -5107,6 +5107,235 @@ R9HAUTO_JSON{
 #
 ################################################################################
 
+
+################################################################################
+#
+# Farm Controller - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - motorcnt : switch 갯수
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"farmcontroller",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"farmcontroller",
+		"command":"devinfo",
+		"indexes":
+		[
+      ...
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# 상태
+#  - connection : 연결 상태
+#  - curtemp : 현재온도, 온도센서 지원되는 모델
+#  - swidx : 스위치 index
+#  - on : 스위치 on/off
+#  - schedule : 예약 기능 상태
+#  - inidx : input 센서 index
+#  - on : input센서 on/off 상태
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "farmcontroller",
+		"command": "getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg18",
+	"payload": {
+		"devtype": "farmcontroller",
+		"command": "getstate",
+		"indexes": [
+		  ...	
+		]
+	}
+}
+
+
+# ------------------------------------------------------------------------------
+# IO 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload":
+	{
+		"devtype": "farmcontroller",
+		"command": "setstate",
+		"indexes": [
+			{
+				"idx": 1,
+				"switches": [
+					{"swidx": 1, "setposition": 30}
+				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 설정메뉴 셋팅
+#  -
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON{
+	"type": "request",
+	"version": 1,
+	"msgid": "726US1AU5A",
+	"payload": {
+		"indexes": [
+			{
+				"userpush": false,
+				"doutactive": 1,
+				"idx": 2,
+				"schedulepush": false,
+				"dinactive": 0,
+				"systempush": true,
+				"dintact": false,
+				"dinkeeptime": false,
+				"doutstyle": false
+			}
+		],
+		"devtype": "farmcontroller",
+		"command": "setmode"
+	}
+}
+
+# ------------------------------------------------------------------------------
+# IO 푸쉬 메세지 설정
+#  -
+# ------------------------------------------------------------------------------
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"farmcontroller",
+		"command":"setpushmsg",
+		"indexes":
+		[
+			{
+				"idx":1,
+				"switches":
+				[
+					{"swidx":1, "msg":"푸쉬"}
+				]
+			}
+		]
+	}
+}
+# ------------------------------------------------------------------------------
+# IO 푸쉬 메세지 조회
+#  -
+# ------------------------------------------------------------------------------
+
+# 푸쉬 메세지 조회
+R9HAUTO_JSON
+{
+	"type": "request",
+	"version": 1,
+	"msgid": "1J3J6J4EFF",
+	"payload": {
+		"indexes": [
+			{
+				"idx": 2,
+				"switches": [
+					{
+						"swidx": 1
+					}
+				]
+			}
+		],
+		"devtype": "farmcontroller",
+		"command": "getpushmsg"
+	}
+}
+
+# 상태 설정
+R9HAUTO_JSON
+{
+	"code": 0,
+	"type": "reply",
+	"version": 1,
+	"msgid": "msg0",
+	"payload": {
+		"indexes": [
+			{
+				"switches": [
+					{
+						"swidx": 1,
+						"msg": "가가가가"
+					}
+				],
+				"idx": 2
+			}
+		],
+		"devtype": "farmcontroller",
+		"command": "getpushmsg"
+	}
+}
+
+################################################################################
+#
+# Farm Controller - End
+#
+################################################################################
+
+
+
+
+
 ################################################################################
 #
 # 기기 상태변경 업데이트 (gateway to server) - Start
@@ -5249,3 +5478,6 @@ R9HAUTO_JSON
 # 기기정보 업데이트 (gateway to server) - End
 #
 ################################################################################
+
+
+
