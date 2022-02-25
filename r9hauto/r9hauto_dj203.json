@@ -10,6 +10,8 @@
 # 2020-04-21: gomma
 #   * dj203용 R9HAUTO시작
 #   * 기존 R9HAUTO에서 가지고 옴
+# 2022-02-25: gomma
+#   * 열선제어기 heatcable 추가
 #
 # ==============================================================================
 
@@ -2181,5 +2183,208 @@ R9HAUTO_JSON
 ################################################################################
 #
 # 스마트센서 (smartsensor) - End
+#
+################################################################################
+
+################################################################################
+#
+# 열선제어기 (heatcable) - Start
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# 기기 정보
+#  - 열선 정보
+#    > name: 센서 이름
+# ------------------------------------------------------------------------------
+
+# 기기 정보 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"heatcable",
+		"command":"devinfo"
+	}
+}
+
+# 기기 정보 응답
+R9HAUTO_JSON
+{
+  "version":1,
+  "type":"reply",
+  "msgid":"xxyyzz",
+  "payload":
+  {
+    "devtype":"heatcable",
+    "command":"devinfo",
+    "indexes": [
+      {
+        "idx":1,
+				"id":"0123456789",
+        "name":"열선제어기1",
+        "connected": true,
+        "swcnt": 2,
+        "rssi": -38,
+				"schedule": true,
+				"deviceversion": 0
+      }
+    ]
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 상태
+#  - 
+#  - 
+# ------------------------------------------------------------------------------
+
+# 상태 요청
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"heatcable",
+		"command":"getstate",
+		"indexes":
+		[
+			{"idx":1}
+		]
+	}
+}
+
+# 상태 응답
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"heatcable",
+		"command":"getstate",
+		"indexes":
+		[
+			{
+				"idx":1,
+        "connection", true,
+        "devid": "3601020304",
+        "line1_short": true,
+        "line1_opne": true,
+        "line2_short": true,
+        "line2_opne": true,
+        "ext_short": true,
+        "ext_open": true,
+        "line1_cable_short": true,
+        "line1_cable_open": true,
+        "line2_cable_short": true,
+        "line2_cable_open": true,
+        "ext_curtemp": 32,
+        "ext_replay": true,
+        "mode_push": true,
+        "mode_manual": true,
+        "mode_rotation": true,
+        "schedule": true,
+        "power": true,
+        "ext_starttemp": 15,
+        "ext_stoptemp": 15,
+        "line_stoptemp": 15,
+        "line_stoptemp": 15,
+        "rotationtime": 15,
+        "switches": [
+          {
+            "swidx":1,
+            "on": true,
+            "curtemp": 32.5
+          },
+          {
+            "swidx":2,
+            "on": true,
+            "curtemp": 32.5
+          }
+        ]
+			}
+		]
+	}
+}
+
+# 설정 요청
+R9HAUTO_JSON
+{
+  "version": 1,
+  "type": "request",
+  "msgid":"xxyyzz",
+  "payload": {
+    "devtype":"heatcable",
+    "command":"setstate",
+    "indexes": [
+      {
+        "idx":1,
+        "switches": [
+          {
+            "swidx":1,
+            "on": true,
+            "power": true,
+            "schedule": true
+          },
+          {
+            "swidx":2,
+            "on": true,
+            "power": true,
+            "schedule": true
+          }
+        ]
+      }
+    ]
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 기기 상태변경 정보 업데이트
+# gateway ---> server
+# ------------------------------------------------------------------------------
+# 상태 업데이트
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"request",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype": "heatcable",
+		"command": "reportstate",
+    "indexes": [
+      {
+        "idx": 1,
+        "from": "01ffff01@raonix.co.kr",
+        "updatedat": 1460689262,
+        "devid": "3601020304",
+        "connected": true,
+        "switches": [
+          {
+            "swidx":1,
+            "on": ture,
+            "curtemp": 29
+          },
+          {
+            "swidx":2,
+            "on": ture,
+            "curtemp": 29
+          }
+        ]
+      }
+    ]
+	}
+}
+
+################################################################################
+#
+# 열선제어기 (heatcable) - End
 #
 ################################################################################

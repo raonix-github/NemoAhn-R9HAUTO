@@ -2888,7 +2888,8 @@ R9HAUTO_JSON
 		"command":"getstate",
 		"indexes":
 		[
-			{"idx":1}
+			{"idx":1},
+			{"idx":2}
 		]
 	}
 }
@@ -3743,6 +3744,31 @@ R9HAUTO_JSON
 				[
 					{"id":"360102000001", "connected":true}
 				]
+			}
+		]
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 친구목록 정보 업데이트
+#  - 친구목록을 업데이트함.
+# ------------------------------------------------------------------------------
+R9HAUTO_JSON
+{
+	"version":1,
+	"type":"reply",
+	"msgid":"xxyyzz",
+	"payload":
+	{
+		"devtype":"system",
+		"command":"updatefriendinfo",
+		"indexes":
+		[
+			{
+				"id": "user1"
+			},
+			{
+				"id": "user2"
 			}
 		]
 	}
@@ -5473,11 +5499,36 @@ R9HAUTO_JSON
 	}
 }
 
+# Light
+R9HAUTO_JSON
+{
+	"version": 1,
+	"type": "request",
+	"msgid": "xxyyzz",
+	"payload": {
+		"devtype": "light",
+		"command": "reportstate",
+		"indexes": [
+			{
+				"idx": 1,
+				"from": "01ffff02@raonix.co.kr",
+				"devid": "8212345678",
+				"updatedat": 1460689333,
+        "rssi": -40,
+				"connected": true,
+        "switches": [
+          {
+            "swidx": 1,
+            "on": false
+          }
+        ]
+			}
+		]
+	}
+}
+
 ################################################################################
 #
 # 기기정보 업데이트 (gateway to server) - End
 #
 ################################################################################
-
-
-
